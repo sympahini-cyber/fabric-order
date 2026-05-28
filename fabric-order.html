@@ -5,40 +5,26 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
 <title>FABRIC ORDER</title>
 <style>
-:root {
-  --gold:#C8A84A; --gold-hi:#E4C46A;
-  --ink-0:#050505; --ink-2:#111; --ink-3:#181818; --ink-4:#202020;
-  --ink-5:#2a2a2a; --ink-6:#363636; --ink-7:#484848;
-  --sand-1:#f4f0ea; --sand-2:#c8c0b4; --sand-3:#8a8278;
-  --ruby:#B85448; --sage:#6A9E82;
-}
+:root{--gold:#C8A84A;--ink-0:#050505;--ink-2:#111;--ink-3:#181818;--ink-4:#202020;--ink-5:#2a2a2a;--ink-6:#363636;--ink-7:#484848;--sand-1:#f4f0ea;--sand-2:#c8c0b4;--sand-3:#8a8278;--ruby:#B85448;--sage:#6A9E82;}
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
-html,body{min-height:100%;background:var(--ink-0);color:var(--sand-1);
-  font-family:'Helvetica Neue',Arial,'Hiragino Sans',sans-serif;-webkit-font-smoothing:antialiased}
-.header{position:sticky;top:0;z-index:100;background:var(--ink-2);border-bottom:1px solid var(--ink-6);
-  padding:14px 16px;display:flex;align-items:center;gap:10px}
-.hex{width:30px;height:30px;background:var(--gold);flex-shrink:0;
-  clip-path:polygon(50% 0%,93% 25%,93% 75%,50% 100%,7% 75%,7% 25%)}
+html,body{min-height:100%;background:var(--ink-0);color:var(--sand-1);font-family:'Helvetica Neue',Arial,'Hiragino Sans',sans-serif;-webkit-font-smoothing:antialiased}
+.header{position:sticky;top:0;z-index:100;background:var(--ink-2);border-bottom:1px solid var(--ink-6);padding:14px 16px;display:flex;align-items:center;gap:10px}
+.hex{width:30px;height:30px;background:var(--gold);flex-shrink:0;clip-path:polygon(50% 0%,93% 25%,93% 75%,50% 100%,7% 75%,7% 25%)}
 .logo-text{font-size:13px;font-weight:600;letter-spacing:.12em}
 .logo-sub{font-size:9px;color:var(--sand-3);letter-spacing:.18em;margin-top:1px}
-.badge{margin-left:auto;background:var(--gold);color:#000;font-size:11px;font-weight:700;
-  padding:4px 12px;border-radius:20px}
+.badge{margin-left:auto;background:var(--gold);color:#000;font-size:11px;font-weight:700;padding:4px 12px;border-radius:20px}
 .badge.hidden{display:none}
 .page{display:none;min-height:calc(100vh - 60px);padding:0 0 100px}
 .page.active{display:block}
 .landing{padding:32px 20px;text-align:center}
-.landing-icon{font-size:56px;margin-bottom:20px;opacity:.6}
 .landing-title{font-size:22px;font-weight:700;letter-spacing:.06em;margin-bottom:8px}
 .landing-sub{font-size:13px;color:var(--sand-3);line-height:1.8;margin-bottom:32px}
-.scan-hint{background:var(--ink-3);border:1px solid var(--ink-6);border-radius:12px;
-  padding:20px;text-align:left;max-width:340px;margin:0 auto}
+.scan-hint{background:var(--ink-3);border:1px solid var(--ink-6);border-radius:12px;padding:20px;text-align:left;max-width:340px;margin:0 auto}
 .scan-hint-ttl{font-size:9px;letter-spacing:.18em;color:var(--sand-3);margin-bottom:12px;text-transform:uppercase}
 .scan-step{display:flex;align-items:flex-start;gap:10px;margin-bottom:10px;font-size:12px;color:var(--sand-2);line-height:1.5}
-.step-num{width:20px;height:20px;border-radius:50%;background:var(--gold);color:#000;
-  font-size:10px;font-weight:700;display:flex;align-items:center;justify-content:center;flex-shrink:0;margin-top:1px}
+.step-num{width:20px;height:20px;border-radius:50%;background:var(--gold);color:#000;font-size:10px;font-weight:700;display:flex;align-items:center;justify-content:center;flex-shrink:0;margin-top:1px}
 .cart-body{padding:16px}
-.section-ttl{font-size:9px;letter-spacing:.18em;color:var(--sand-3);text-transform:uppercase;
-  padding:0 4px;margin-bottom:10px}
+.section-ttl{font-size:9px;letter-spacing:.18em;color:var(--sand-3);text-transform:uppercase;padding:0 4px;margin-bottom:10px}
 .card{background:var(--ink-3);border:1px solid var(--ink-6);border-radius:10px;overflow:hidden;margin-bottom:12px}
 .item-row{display:flex;align-items:center;gap:10px;padding:12px 14px;border-bottom:1px solid var(--ink-5)}
 .item-row:last-child{border-bottom:none}
@@ -46,83 +32,46 @@ html,body{min-height:100%;background:var(--ink-0);color:var(--sand-1);
 .item-code{font-size:13px;font-weight:600;font-family:monospace;color:var(--gold);letter-spacing:.04em}
 .item-name{font-size:11px;color:var(--sand-3);margin-top:2px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
 .qty-ctrl{display:flex;align-items:center;gap:6px;flex-shrink:0}
-.qty-btn{width:28px;height:28px;border-radius:50%;background:var(--ink-5);border:1px solid var(--ink-6);
-  color:var(--sand-1);font-size:16px;cursor:pointer;display:flex;align-items:center;justify-content:center}
+.qty-btn{width:28px;height:28px;border-radius:50%;background:var(--ink-5);border:1px solid var(--ink-6);color:var(--sand-1);font-size:16px;cursor:pointer;display:flex;align-items:center;justify-content:center}
 .qty-btn:active{background:var(--ink-7)}
 .qty-num{font-size:15px;font-weight:600;min-width:22px;text-align:center}
-.del-btn{width:28px;height:28px;border-radius:50%;background:transparent;border:1px solid var(--ink-6);
-  color:var(--ruby);font-size:13px;cursor:pointer;display:flex;align-items:center;justify-content:center}
-.del-btn:active{background:rgba(184,84,72,.15)}
+.del-btn{width:28px;height:28px;border-radius:50%;background:transparent;border:1px solid var(--ink-6);color:var(--ruby);font-size:13px;cursor:pointer;display:flex;align-items:center;justify-content:center}
 .form-body{padding:16px}
 .inp-row{margin-bottom:16px}
 .inp-lbl{display:block;font-size:10px;letter-spacing:.12em;color:var(--sand-3);text-transform:uppercase;margin-bottom:6px}
-.inp{width:100%;background:var(--ink-4);border:1px solid var(--ink-6);color:var(--sand-1);
-  padding:12px 14px;border-radius:8px;font-size:14px;outline:none;font-family:inherit}
+.inp{width:100%;background:var(--ink-4);border:1px solid var(--ink-6);color:var(--sand-1);padding:12px 14px;border-radius:8px;font-size:14px;outline:none;font-family:inherit}
 .inp:focus{border-color:var(--gold)}
 .inp::placeholder{color:var(--ink-7)}
-.order-summary{background:var(--ink-4);border:1px solid var(--ink-6);border-radius:8px;
-  padding:12px 14px;margin-bottom:16px;font-size:12px;color:var(--sand-3);line-height:1.8}
+.order-summary{background:var(--ink-4);border:1px solid var(--ink-6);border-radius:8px;padding:12px 14px;margin-bottom:16px;font-size:12px;color:var(--sand-3);line-height:1.8}
 .order-summary strong{color:var(--sand-1);font-size:13px}
 .success{padding:48px 20px;text-align:center}
 .success-icon{font-size:64px;margin-bottom:20px}
 .success-title{font-size:20px;font-weight:700;margin-bottom:8px;color:var(--gold)}
 .success-sub{font-size:13px;color:var(--sand-3);line-height:1.8}
-.bottom-bar{position:fixed;bottom:0;left:0;right:0;background:var(--ink-2);border-top:1px solid var(--ink-6);
-  padding:12px 16px;display:flex;gap:10px;max-width:480px;margin:0 auto}
-.btn{border:none;border-radius:8px;cursor:pointer;font-size:13px;font-weight:600;
-  letter-spacing:.04em;padding:13px 16px;transition:opacity .15s;flex:1;font-family:inherit}
+.bottom-bar{position:fixed;bottom:0;left:0;right:0;background:var(--ink-2);border-top:1px solid var(--ink-6);padding:12px 16px;display:flex;gap:10px;max-width:480px;margin:0 auto}
+.btn{border:none;border-radius:8px;cursor:pointer;font-size:13px;font-weight:600;letter-spacing:.04em;padding:13px 16px;transition:opacity .15s;flex:1;font-family:inherit}
 .btn:active{opacity:.75}
 .btn-gold{background:var(--gold);color:#000}
 .btn-ghost{background:var(--ink-4);color:var(--sand-2);border:1px solid var(--ink-6)}
 .btn-sm{flex:none;padding:13px 14px;font-size:12px}
 .btn:disabled{opacity:.35;cursor:not-allowed}
-.toast-wrap{position:fixed;top:68px;left:50%;transform:translateX(-50%);
-  z-index:999;display:flex;flex-direction:column;gap:6px;pointer-events:none;width:90%;max-width:360px}
-.toast{background:var(--ink-4);border:1px solid var(--ink-6);color:var(--sand-1);
-  border-radius:8px;padding:10px 14px;font-size:13px;animation:fadeUp .2s ease;box-shadow:0 4px 20px rgba(0,0,0,.4)}
+.toast-wrap{position:fixed;top:68px;left:50%;transform:translateX(-50%);z-index:999;display:flex;flex-direction:column;gap:6px;pointer-events:none;width:90%;max-width:360px}
+.toast{background:var(--ink-4);border:1px solid var(--ink-6);color:var(--sand-1);border-radius:8px;padding:10px 14px;font-size:13px;animation:fadeUp .2s ease;box-shadow:0 4px 20px rgba(0,0,0,.4)}
 .toast.ok{border-color:var(--sage);color:var(--sage)}
 .toast.err{border-color:var(--ruby);color:#e88}
 @keyframes fadeUp{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:translateY(0)}}
-@keyframes flash{0%{background:rgba(200,168,74,.18)}100%{background:transparent}}
-.flashed{animation:flash .6s ease}
-#scanner-overlay{
-  display:none;position:fixed;inset:0;z-index:500;
-  background:#000;flex-direction:column;align-items:stretch;
-}
+#scanner-overlay{display:none;position:fixed;inset:0;z-index:500;background:#000;flex-direction:column;align-items:stretch;}
 #scanner-overlay.active{display:flex}
-.scanner-topbar{
-  display:flex;justify-content:space-between;align-items:center;
-  padding:14px 16px;background:rgba(0,0,0,.85);
-  flex-shrink:0;border-bottom:1px solid rgba(255,255,255,.12);
-}
+.scanner-topbar{display:flex;justify-content:space-between;align-items:center;padding:14px 16px;background:rgba(0,0,0,.85);flex-shrink:0;border-bottom:1px solid rgba(255,255,255,.12);}
 .scanner-topbar-title{color:#fff;font-size:15px;font-weight:600;letter-spacing:.06em}
-.scanner-close{
-  background:rgba(255,255,255,.15);border:1px solid rgba(255,255,255,.3);
-  color:#fff;padding:10px 20px;border-radius:8px;
-  font-size:13px;font-weight:600;cursor:pointer;font-family:inherit;
-}
-.scanner-close:active{background:rgba(255,255,255,.25)}
+.scanner-close{background:rgba(255,255,255,.15);border:1px solid rgba(255,255,255,.3);color:#fff;padding:10px 20px;border-radius:8px;font-size:13px;font-weight:600;cursor:pointer;font-family:inherit;}
 .scanner-frame{position:relative;flex:1;min-height:0;overflow:hidden;}
 #scanner-video{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;display:block}
 #scanner-canvas{display:none}
-.scanner-aim{
-  position:absolute;inset:0;display:flex;align-items:center;justify-content:center;pointer-events:none;
-}
-.scanner-aim::before{
-  content:'';display:block;width:220px;height:220px;
-  border:2px solid var(--gold);border-radius:16px;
-  box-shadow:0 0 0 2000px rgba(0,0,0,.5);
-}
-.scanner-status{
-  position:absolute;bottom:24px;left:0;right:0;
-  text-align:center;font-size:14px;color:rgba(255,255,255,.9);
-  letter-spacing:.04em;padding:8px 20px;
-  text-shadow:0 1px 6px rgba(0,0,0,.9);white-space:pre-line;line-height:1.6;
-}
-.scanner-err-hint{
-  position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);
-  text-align:center;color:#fff;padding:24px 20px;width:100%;line-height:1.8;font-size:13px;
-}
+.scanner-aim{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;pointer-events:none;}
+.scanner-aim::before{content:'';display:block;width:220px;height:220px;border:2px solid var(--gold);border-radius:16px;box-shadow:0 0 0 2000px rgba(0,0,0,.5);}
+.scanner-status{position:absolute;bottom:24px;left:0;right:0;text-align:center;font-size:14px;color:rgba(255,255,255,.9);letter-spacing:.04em;padding:8px 20px;text-shadow:0 1px 6px rgba(0,0,0,.9);white-space:pre-line;line-height:1.6;}
+.scanner-err-hint{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);text-align:center;color:#fff;padding:24px 20px;width:100%;line-height:1.8;font-size:13px;}
 </style>
 </head>
 <body>
@@ -136,7 +85,7 @@ html,body{min-height:100%;background:var(--ink-0);color:var(--sand-1);
 <div id="scanner-overlay">
   <div class="scanner-topbar">
     <div class="scanner-topbar-title">QRスキャン</div>
-    <button class="scanner-close" onclick="closeScanner()">X 閉じる</button>
+    <button class="scanner-close" onclick="closeScanner()">閉じる</button>
   </div>
   <div class="scanner-frame">
     <video id="scanner-video" playsinline autoplay muted></video>
@@ -149,7 +98,6 @@ html,body{min-height:100%;background:var(--ink-0);color:var(--sand-1);
 
 <div class="page active" id="page-landing">
   <div class="landing">
-    <div class="landing-icon">&#9633;</div>
     <div class="landing-title">FABRIC ORDER</div>
     <div class="landing-sub">展示サンプルのQRコードをスキャンして<br>お気に入りの生地をリストに追加できます</div>
     <div class="scan-hint">
@@ -159,7 +107,7 @@ html,body{min-height:100%;background:var(--ink-0);color:var(--sand-1);
       <div class="scan-step"><div class="step-num">3</div><div>「注文する」から会社名とお名前を入力して送信してください</div></div>
     </div>
     <br>
-    <button class="btn btn-gold" style="max-width:260px;margin:0 auto;display:flex;align-items:center;justify-content:center;gap:8px" onclick="openScanner()">スキャンして開始</button>
+    <button class="btn btn-gold" style="max-width:260px;margin:0 auto;display:flex;align-items:center;justify-content:center" onclick="openScanner()">スキャンして開始</button>
   </div>
 </div>
 
@@ -192,7 +140,7 @@ html,body{min-height:100%;background:var(--ink-0);color:var(--sand-1);
   <div class="success">
     <div class="success-icon">✓</div>
     <div class="success-title">送信完了</div>
-    <div class="success-sub" id="success-msg">ご注文を送信しました。<br>担当者からご連絡いたします。</div>
+    <div class="success-sub" id="success-msg">ご注文を送信しました。</div>
     <br><br>
     <button class="btn btn-ghost" style="max-width:200px;margin:0 auto" onclick="resetAll()">最初に戻る</button>
   </div>
@@ -200,158 +148,142 @@ html,body{min-height:100%;background:var(--ink-0);color:var(--sand-1);
 
 <script src="https://cdn.jsdelivr.net/npm/jsqr@1.4.0/dist/jsQR.min.js"></script>
 <script>
-const STORE = 'faborder_v2';
-function load(){try{return JSON.parse(sessionStorage.getItem(STORE)||'{}');}catch(e){return {};}}
+const STORE='faborder_v2';
+function load(){try{return JSON.parse(sessionStorage.getItem(STORE)||'{}');}catch(e){return{};}}
 function save(s){sessionStorage.setItem(STORE,JSON.stringify(s));}
 function getState(){const s=load();return{items:s.items||[],ep:s.ep||'',page:s.page||'landing'};}
-function setState(upd){const s={...getState(),...upd};save(s);return s;}
+function setState(u){const s={...getState(),...u};save(s);return s;}
 
 (function(){
   const p=new URLSearchParams(location.search);
   const add=p.get('add'),name=p.get('name')||'',ep=p.get('ep')||'';
-  let state=getState();
-  if(ep) state=setState({ep});
+  let st=getState();
+  if(ep) st=setState({ep});
   if(add){
-    const items=[...state.items];
+    const items=[...st.items];
     const ex=items.find(i=>i.code===add);
-    if(ex){ex.qty++;toast(add+' — 数量 '+ex.qty,'ok');}
-    else{items.push({code:add,name:decodeURIComponent(name),qty:1});toast(add+' を追加しました','ok');}
+    if(ex){ex.qty++;toast(add+' x'+ex.qty,'ok');}
+    else{items.push({code:add,name:decodeURIComponent(name),qty:1});toast(add+' 追加','ok');}
     setState({items,page:'cart'});
     history.replaceState(null,'',location.pathname);
   }
-  const curPage=getState().page;
-  showPage(curPage==='success'?'landing':curPage,false);
+  showPage(getState().page==='success'?'landing':getState().page,false);
   updateBadge();
 })();
 
 function showPage(name,persist=true){
   document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));
   document.getElementById('page-'+name)?.classList.add('active');
-  if(persist) setState({page:name});
+  if(persist)setState({page:name});
   window.scrollTo(0,0);
-  if(name==='cart') renderCart();
-  if(name==='checkout') renderCheckout();
+  if(name==='cart')renderCart();
+  if(name==='checkout')renderCheckout();
 }
-function updateBadge(){
-  const n=getState().items.length;
-  const b=document.getElementById('badge');
-  b.textContent=n+' 品番';
-  b.classList.toggle('hidden',n===0);
-}
+function updateBadge(){const n=getState().items.length;const b=document.getElementById('badge');b.textContent=n+' 品番';b.classList.toggle('hidden',n===0);}
 function renderCart(){
-  const{items}=getState();
-  const el=document.getElementById('item-list');
-  if(!items.length){el.innerHTML='<div style="padding:32px 20px;text-align:center;color:var(--sand-3);font-size:13px">アイテムがありません<br><small style="margin-top:8px;display:block">「＋スキャン」ボタンでQRを読み取ってください</small></div>';return;}
-  el.innerHTML=items.map((it,i)=>'<div class="item-row"><div class="item-info"><div class="item-code">'+esc(it.code)+'</div>'+(it.name?'<div class="item-name">'+esc(it.name)+'</div>':'')+'</div><div class="qty-ctrl"><button class="qty-btn" onclick="changeQty('+i+',-1)">−</button><div class="qty-num">'+it.qty+'</div><button class="qty-btn" onclick="changeQty('+i+',1)">＋</button></div><button class="del-btn" onclick="removeItem('+i+')">✕</button></div>').join('');
+  const{items}=getState();const el=document.getElementById('item-list');
+  if(!items.length){el.innerHTML='<div style="padding:32px 20px;text-align:center;color:var(--sand-3);font-size:13px">アイテムがありません<br><small>「+スキャン」でQRを読み取ってください</small></div>';return;}
+  el.innerHTML=items.map((it,i)=>'<div class="item-row"><div class="item-info"><div class="item-code">'+esc(it.code)+'</div>'+(it.name?'<div class="item-name">'+esc(it.name)+'</div>':'')+'</div><div class="qty-ctrl"><button class="qty-btn" onclick="changeQty('+i+',-1)">-</button><div class="qty-num">'+it.qty+'</div><button class="qty-btn" onclick="changeQty('+i+',1)">+</button></div><button class="del-btn" onclick="removeItem('+i+')">x</button></div>').join('');
   updateBadge();
 }
 function changeQty(i,d){const s=getState();s.items[i].qty=Math.max(1,s.items[i].qty+d);setState({items:s.items});renderCart();}
 function removeItem(i){const s=getState();s.items.splice(i,1);setState({items:s.items});if(!s.items.length)showPage('landing');else renderCart();}
-function clearCart(){if(!confirm('リストをリセットしますか？'))return;setState({items:[],page:'landing'});updateBadge();showPage('landing',false);toast('リセットしました','');}
+function clearCart(){if(!confirm('リセットしますか？'))return;setState({items:[],page:'landing'});updateBadge();showPage('landing',false);}
 function showCheckout(){if(!getState().items.length){toast('アイテムを選択してください','err');return;}showPage('checkout');}
-function renderCheckout(){const{items}=getState();document.getElementById('order-summary').innerHTML='<strong>'+items.length+' 品番</strong><br>'+items.map(i=>esc(i.code)+(i.qty>1?' x'+i.qty:'')+(i.name?' — '+esc(i.name):'')).join('<br>');}
+function renderCheckout(){const{items}=getState();document.getElementById('order-summary').innerHTML='<strong>'+items.length+' 品番</strong><br>'+items.map(i=>esc(i.code)+(i.qty>1?' x'+i.qty:'')+(i.name?' - '+esc(i.name):'')).join('<br>');}
 async function sendOrder(){
   const company=document.getElementById('f-company').value.trim();
   const name=document.getElementById('f-name').value.trim();
-  if(!company){toast('会社名を入力してください','err');document.getElementById('f-company').focus();return;}
-  if(!name){toast('お名前を入力してください','err');document.getElementById('f-name').focus();return;}
-  const state=getState();const ep=state.ep;
-  if(!ep){toast('送信先が設定されていません。管理者にお問い合わせください。','err');return;}
-  const payload={senderCompany:company,senderName:name,sentAt:new Date().toISOString(),items:state.items};
+  if(!company){toast('会社名を入力してください','err');return;}
+  if(!name){toast('お名前を入力してください','err');return;}
+  const{ep,items}=getState();
+  if(!ep){toast('送信先が設定されていません','err');return;}
   const btn=document.getElementById('send-btn');btn.disabled=true;btn.textContent='送信中...';
   try{
-    await fetch(ep,{method:'POST',mode:'no-cors',headers:{'Content-Type':'application/json'},body:JSON.stringify(payload)});
+    await fetch(ep,{method:'POST',mode:'no-cors',headers:{'Content-Type':'application/json'},body:JSON.stringify({senderCompany:company,senderName:name,sentAt:new Date().toISOString(),items})});
     setState({items:[],page:'success'});
-    document.getElementById('success-msg').textContent=company+' '+name+' 様のご注文を送信しました。\n担当者からご連絡いたします。';
+    document.getElementById('success-msg').textContent=company+' '+name+' 様のご注文を送信しました。';
     showPage('success',false);updateBadge();
   }catch(e){toast('送信エラー: '+e.message,'err');btn.disabled=false;btn.textContent='送信する';}
 }
 function resetAll(){setState({items:[],page:'landing',ep:getState().ep});updateBadge();showPage('landing',false);}
-function toast(msg,type){type=type||'';const wrap=document.getElementById('toast-wrap');const el=document.createElement('div');el.className='toast '+type;el.textContent=msg;wrap.appendChild(el);setTimeout(()=>el.remove(),3000);}
-function esc(s){return String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');}
+function toast(msg,type){const el=document.createElement('div');el.className='toast '+(type||'');el.textContent=msg;document.getElementById('toast-wrap').appendChild(el);setTimeout(()=>el.remove(),3000);}
+function esc(s){return String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');}
 
-/* QR SCANNER */
-let _scanStream=null,_scanRafId=null,_lastCode='',_lastTime=0,_tickCount=0;
+/* ---- QR SCANNER: BarcodeDetector優先 → jsQRフォールバック ---- */
+let _stream=null,_active=false,_lastCode='',_lastTime=0,_det=null;
 
 async function openScanner(){
-  const overlay=document.getElementById('scanner-overlay');
-  overlay.classList.add('active');
+  document.getElementById('scanner-overlay').classList.add('active');
   setStatus('カメラを起動中...');
-  setErrHint('');
-  _lastCode='';_tickCount=0;
+  setErrHint('');_lastCode='';
+  _det=null;
+  if('BarcodeDetector' in window){
+    try{_det=new BarcodeDetector({formats:['qr_code']});}catch(e){}
+  }
   try{
-    try{
-      _scanStream=await navigator.mediaDevices.getUserMedia({video:{facingMode:{ideal:'environment'},width:{ideal:1280},height:{ideal:720}}});
-    }catch(e2){
-      _scanStream=await navigator.mediaDevices.getUserMedia({video:true});
-    }
-    const video=document.getElementById('scanner-video');
-    video.srcObject=_scanStream;
-    await video.play();
+    try{_stream=await navigator.mediaDevices.getUserMedia({video:{facingMode:{ideal:'environment'},width:{ideal:640},height:{ideal:480}}});}
+    catch(e2){_stream=await navigator.mediaDevices.getUserMedia({video:true});}
+    const v=document.getElementById('scanner-video');
+    v.srcObject=_stream;await v.play();
     setStatus('QRコードをフレームに合わせてください');
-    _scanRafId=requestAnimationFrame(scanTick);
+    _active=true;scanLoop();
   }catch(e){
     if(e.name==='NotAllowedError'||e.name==='PermissionDeniedError'){
       setStatus('');
-      setErrHint('カメラへのアクセスが拒否されました\n\niPhone: 設定 → Safari → カメラ → 許可\nAndroid: アドレスバー横の鍵アイコン → カメラを許可\n\n設定変更後、ページを再読み込みしてください');
-    }else if(e.name==='NotFoundError'){
-      setStatus('カメラが見つかりません');
-    }else{
-      setStatus('カメラを起動できませんでした: '+e.message);
-    }
+      setErrHint('カメラへのアクセスが拒否されました\n\niPhone: 設定→Safari→カメラ→許可\nAndroid: アドレスバー横の鍵アイコン→カメラ許可\n\n設定後ページを再読み込みしてください');
+    }else{setStatus('カメラエラー: '+e.message);}
   }
 }
-function setErrHint(msg){const el=document.getElementById('scanner-err-hint');if(!el)return;el.style.display=msg?'block':'none';el.textContent=msg;}
-function closeScanner(){
-  if(_scanRafId){cancelAnimationFrame(_scanRafId);_scanRafId=null;}
-  if(_scanStream){_scanStream.getTracks().forEach(t=>t.stop());_scanStream=null;}
-  document.getElementById('scanner-video').srcObject=null;
-  document.getElementById('scanner-overlay').classList.remove('active');
-}
-function setStatus(msg){document.getElementById('scanner-status').textContent=msg;}
 
-function scanTick(){
-  const video=document.getElementById('scanner-video');
-  const canvas=document.getElementById('scanner-canvas');
-  if(video.readyState!==video.HAVE_ENOUGH_DATA){_scanRafId=requestAnimationFrame(scanTick);return;}
-  _tickCount++;
-  if(_tickCount%3!==0){_scanRafId=requestAnimationFrame(scanTick);return;}
-  canvas.width=video.videoWidth;
-  canvas.height=video.videoHeight;
-  const ctx=canvas.getContext('2d');
-  ctx.drawImage(video,0,0,canvas.width,canvas.height);
-  const imgData=ctx.getImageData(0,0,canvas.width,canvas.height);
-  const result=jsQR(imgData.data,imgData.width,imgData.height,{inversionAttempts:'attemptBoth'});
-  if(result){
-    const now=Date.now();
-    if(result.data!==_lastCode||now-_lastTime>2000){
-      _lastCode=result.data;_lastTime=now;
-      handleScannedQR(result.data);
-    }
-  }else{
-    if(_tickCount%30===0){
+async function scanLoop(){
+  if(!_active||!_stream)return;
+  const v=document.getElementById('scanner-video');
+  if(v.readyState===v.HAVE_ENOUGH_DATA){
+    let raw=null;
+    try{
+      if(_det){
+        const codes=await _det.detect(v);
+        if(codes.length>0)raw=codes[0].rawValue;
+      }else{
+        const c=document.getElementById('scanner-canvas');
+        c.width=v.videoWidth;c.height=v.videoHeight;
+        const ctx=c.getContext('2d');ctx.drawImage(v,0,0);
+        const d=ctx.getImageData(0,0,c.width,c.height);
+        const r=jsQR(d.data,d.width,d.height,{inversionAttempts:'attemptBoth'});
+        if(r)raw=r.data;
+      }
+    }catch(e){}
+    if(raw){
+      const now=Date.now();
+      if(raw!==_lastCode||now-_lastTime>2000){_lastCode=raw;_lastTime=now;handleScannedQR(raw);}
+    }else{
       const st=document.getElementById('scanner-status');
-      if(st&&st.textContent==='QRコードをフレームに合わせてください'){st.textContent='QRコードをフレームに合わせてください…';}
-      else if(st&&st.textContent.endsWith('…')){st.textContent='QRコードをフレームに合わせてください';}
+      if(st&&st.textContent.startsWith('QRコードをフレーム')){
+        st.textContent=st.textContent.endsWith('…')?'QRコードをフレームに合わせてください':'QRコードをフレームに合わせてください…';
+      }
     }
   }
-  _scanRafId=requestAnimationFrame(scanTick);
+  if(_active)setTimeout(scanLoop,300);
 }
+
+function setErrHint(msg){const el=document.getElementById('scanner-err-hint');if(!el)return;el.style.display=msg?'block':'none';el.textContent=msg;}
+function closeScanner(){_active=false;if(_stream){_stream.getTracks().forEach(t=>t.stop());_stream=null;}document.getElementById('scanner-video').srcObject=null;document.getElementById('scanner-overlay').classList.remove('active');}
+function setStatus(msg){document.getElementById('scanner-status').textContent=msg;}
 
 function handleScannedQR(raw){
   let code='',name='',ep='';
-  try{const url=new URL(raw);code=url.searchParams.get('add')||'';name=url.searchParams.get('name')||'';ep=url.searchParams.get('ep')||'';}
+  try{const u=new URL(raw);code=u.searchParams.get('add')||'';name=u.searchParams.get('name')||'';ep=u.searchParams.get('ep')||'';}
   catch(e){code=raw.trim();}
-  if(!code){setStatus('QRコードを認識できませんでした');return;}
-  const state=getState();
-  if(ep&&!state.ep) setState({ep});
+  if(!code){setStatus('認識できませんでした');return;}
+  const st=getState();
+  if(ep&&!st.ep)setState({ep});
   const items=[...getState().items];
   const ex=items.find(i=>i.code===code);
-  if(ex){ex.qty++;toast(code+' — 数量 '+ex.qty,'ok');setStatus('✓ '+code+' の数量を増やしました (x'+ex.qty+')');}
-  else{items.push({code,name:decodeURIComponent(name),qty:1});toast(code+' を追加しました','ok');setStatus('✓ '+code+' を追加しました');}
-  setState({items,page:'cart'});
-  updateBadge();
-  if(navigator.vibrate) navigator.vibrate(80);
+  if(ex){ex.qty++;toast(code+' x'+ex.qty,'ok');setStatus('✓ '+code+' x'+ex.qty);}
+  else{items.push({code,name:decodeURIComponent(name),qty:1});toast(code+' 追加','ok');setStatus('✓ '+code+' 追加');}
+  setState({items,page:'cart'});updateBadge();
+  if(navigator.vibrate)navigator.vibrate(80);
   setTimeout(()=>setStatus('続けてスキャンできます'),1500);
 }
 </script>
