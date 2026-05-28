@@ -1,0 +1,376 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>FABRIC ORDER</title>
+<style>
+:root {
+  --gold:#C8A84A; --gold-hi:#E4C46A;
+  --ink-0:#050505; --ink-2:#111; --ink-3:#181818; --ink-4:#202020;
+  --ink-5:#2a2a2a; --ink-6:#363636; --ink-7:#484848;
+  --sand-1:#f4f0ea; --sand-2:#c8c0b4; --sand-3:#8a8278;
+  --ruby:#B85448; --sage:#6A9E82;
+}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html,body{min-height:100%;background:var(--ink-0);color:var(--sand-1);
+  font-family:'Helvetica Neue',Arial,'Hiragino Sans',sans-serif;-webkit-font-smoothing:antialiased}
+
+/* Header */
+.header{position:sticky;top:0;z-index:100;background:var(--ink-2);border-bottom:1px solid var(--ink-6);
+  padding:14px 16px;display:flex;align-items:center;gap:10px}
+.hex{width:30px;height:30px;background:var(--gold);flex-shrink:0;
+  clip-path:polygon(50% 0%,93% 25%,93% 75%,50% 100%,7% 75%,7% 25%)}
+.logo-text{font-size:13px;font-weight:600;letter-spacing:.12em}
+.logo-sub{font-size:9px;color:var(--sand-3);letter-spacing:.18em;margin-top:1px}
+.badge{margin-left:auto;background:var(--gold);color:#000;font-size:11px;font-weight:700;
+  padding:4px 12px;border-radius:20px}
+.badge.hidden{display:none}
+
+/* Content */
+.page{display:none;min-height:calc(100vh - 60px);padding:0 0 100px}
+.page.active{display:block}
+
+/* Landing */
+.landing{padding:32px 20px;text-align:center}
+.landing-icon{font-size:56px;margin-bottom:20px;opacity:.6}
+.landing-title{font-size:22px;font-weight:700;letter-spacing:.06em;margin-bottom:8px}
+.landing-sub{font-size:13px;color:var(--sand-3);line-height:1.8;margin-bottom:32px}
+.scan-hint{background:var(--ink-3);border:1px solid var(--ink-6);border-radius:12px;
+  padding:20px;text-align:left;max-width:340px;margin:0 auto}
+.scan-hint-ttl{font-size:9px;letter-spacing:.18em;color:var(--sand-3);margin-bottom:12px;text-transform:uppercase}
+.scan-step{display:flex;align-items:flex-start;gap:10px;margin-bottom:10px;font-size:12px;color:var(--sand-2);line-height:1.5}
+.step-num{width:20px;height:20px;border-radius:50%;background:var(--gold);color:#000;
+  font-size:10px;font-weight:700;display:flex;align-items:center;justify-content:center;flex-shrink:0;margin-top:1px}
+
+/* Cart */
+.cart-body{padding:16px}
+.section-ttl{font-size:9px;letter-spacing:.18em;color:var(--sand-3);text-transform:uppercase;
+  padding:0 4px;margin-bottom:10px}
+.card{background:var(--ink-3);border:1px solid var(--ink-6);border-radius:10px;overflow:hidden;margin-bottom:12px}
+.item-row{display:flex;align-items:center;gap:10px;padding:12px 14px;border-bottom:1px solid var(--ink-5)}
+.item-row:last-child{border-bottom:none}
+.item-info{flex:1;min-width:0}
+.item-code{font-size:13px;font-weight:600;font-family:monospace;color:var(--gold);letter-spacing:.04em}
+.item-name{font-size:11px;color:var(--sand-3);margin-top:2px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.qty-ctrl{display:flex;align-items:center;gap:6px;flex-shrink:0}
+.qty-btn{width:28px;height:28px;border-radius:50%;background:var(--ink-5);border:1px solid var(--ink-6);
+  color:var(--sand-1);font-size:16px;cursor:pointer;display:flex;align-items:center;justify-content:center}
+.qty-btn:active{background:var(--ink-7)}
+.qty-num{font-size:15px;font-weight:600;min-width:22px;text-align:center}
+.del-btn{width:28px;height:28px;border-radius:50%;background:transparent;border:1px solid var(--ink-6);
+  color:var(--ruby);font-size:13px;cursor:pointer;display:flex;align-items:center;justify-content:center}
+.del-btn:active{background:rgba(184,84,72,.15)}
+
+/* Form */
+.form-body{padding:16px}
+.inp-row{margin-bottom:16px}
+.inp-lbl{display:block;font-size:10px;letter-spacing:.12em;color:var(--sand-3);
+  text-transform:uppercase;margin-bottom:6px}
+.inp{width:100%;background:var(--ink-4);border:1px solid var(--ink-6);color:var(--sand-1);
+  padding:12px 14px;border-radius:8px;font-size:14px;outline:none;font-family:inherit}
+.inp:focus{border-color:var(--gold)}
+.inp::placeholder{color:var(--ink-7)}
+.order-summary{background:var(--ink-4);border:1px solid var(--ink-6);border-radius:8px;
+  padding:12px 14px;margin-bottom:16px;font-size:12px;color:var(--sand-3);line-height:1.8}
+.order-summary strong{color:var(--sand-1);font-size:13px}
+
+/* Success */
+.success{padding:48px 20px;text-align:center}
+.success-icon{font-size:64px;margin-bottom:20px}
+.success-title{font-size:20px;font-weight:700;margin-bottom:8px;color:var(--gold)}
+.success-sub{font-size:13px;color:var(--sand-3);line-height:1.8}
+
+/* Bottom bar */
+.bottom-bar{position:fixed;bottom:0;left:0;right:0;background:var(--ink-2);border-top:1px solid var(--ink-6);
+  padding:12px 16px;display:flex;gap:10px;max-width:480px;margin:0 auto}
+.btn{border:none;border-radius:8px;cursor:pointer;font-size:13px;font-weight:600;
+  letter-spacing:.04em;padding:13px 16px;transition:opacity .15s;flex:1;font-family:inherit}
+.btn:active{opacity:.75}
+.btn-gold{background:var(--gold);color:#000}
+.btn-ghost{background:var(--ink-4);color:var(--sand-2);border:1px solid var(--ink-6)}
+.btn-sm{flex:none;padding:13px 14px;font-size:12px}
+.btn:disabled{opacity:.35;cursor:not-allowed}
+
+/* Toast */
+.toast-wrap{position:fixed;top:68px;left:50%;transform:translateX(-50%);
+  z-index:999;display:flex;flex-direction:column;gap:6px;pointer-events:none;width:90%;max-width:360px}
+.toast{background:var(--ink-4);border:1px solid var(--ink-6);color:var(--sand-1);
+  border-radius:8px;padding:10px 14px;font-size:13px;animation:fadeUp .2s ease;box-shadow:0 4px 20px rgba(0,0,0,.4)}
+.toast.ok{border-color:var(--sage);color:var(--sage)}
+.toast.err{border-color:var(--ruby);color:#e88}
+@keyframes fadeUp{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:translateY(0)}}
+
+/* Added flash */
+@keyframes flash{0%{background:rgba(200,168,74,.18)}100%{background:transparent}}
+.flashed{animation:flash .6s ease}
+</style>
+</head>
+<body>
+
+<div class="header">
+  <div class="hex"></div>
+  <div>
+    <div class="logo-text">FABRIC ORDER</div>
+    <div class="logo-sub">SELECTION SHEET</div>
+  </div>
+  <div class="badge hidden" id="badge">0</div>
+</div>
+
+<div class="toast-wrap" id="toast-wrap"></div>
+
+<!-- ① ランディング -->
+<div class="page active" id="page-landing">
+  <div class="landing">
+    <div class="landing-icon">◻</div>
+    <div class="landing-title">FABRIC ORDER</div>
+    <div class="landing-sub">展示サンプルのQRコードをスキャンして<br>お気に入りの生地をリストに追加できます</div>
+    <div class="scan-hint">
+      <div class="scan-hint-ttl">ご利用方法</div>
+      <div class="scan-step"><div class="step-num">1</div><div>展示サンプルに貼られたQRコードをカメラで読み取ってください</div></div>
+      <div class="scan-step"><div class="step-num">2</div><div>読み取るたびにリストに追加されます</div></div>
+      <div class="scan-step"><div class="step-num">3</div><div>「注文する」から会社名とお名前を入力して送信してください</div></div>
+    </div>
+  </div>
+</div>
+
+<!-- ② カート -->
+<div class="page" id="page-cart">
+  <div class="cart-body">
+    <div class="section-ttl">選択中のアイテム</div>
+    <div class="card" id="item-list"></div>
+  </div>
+  <div class="bottom-bar">
+    <button class="btn btn-ghost btn-sm" onclick="clearCart()">リセット</button>
+    <button class="btn btn-gold" onclick="showCheckout()">注文する →</button>
+  </div>
+</div>
+
+<!-- ③ チェックアウト -->
+<div class="page" id="page-checkout">
+  <div class="form-body">
+    <div class="section-ttl">送信者情報</div>
+    <div class="inp-row">
+      <label class="inp-lbl">会社名</label>
+      <input class="inp" id="f-company" type="text" placeholder="株式会社〇〇" autocomplete="organization">
+    </div>
+    <div class="inp-row">
+      <label class="inp-lbl">お名前</label>
+      <input class="inp" id="f-name" type="text" placeholder="山田 太郎" autocomplete="name">
+    </div>
+    <div class="inp-row">
+      <label class="inp-lbl">選択アイテム</label>
+      <div class="order-summary" id="order-summary"></div>
+    </div>
+  </div>
+  <div class="bottom-bar">
+    <button class="btn btn-ghost btn-sm" onclick="showPage('cart')">← 戻る</button>
+    <button class="btn btn-gold" id="send-btn" onclick="sendOrder()">送信する</button>
+  </div>
+</div>
+
+<!-- ④ 完了 -->
+<div class="page" id="page-success">
+  <div class="success">
+    <div class="success-icon">✓</div>
+    <div class="success-title">送信完了</div>
+    <div class="success-sub" id="success-msg">ご注文を送信しました。<br>担当者からご連絡いたします。</div>
+    <br><br>
+    <button class="btn btn-ghost" style="max-width:200px;margin:0 auto" onclick="resetAll()">最初に戻る</button>
+  </div>
+</div>
+
+<script>
+const STORE = 'faborder_v2';
+
+/* ── State ── */
+function load() {
+  try { return JSON.parse(sessionStorage.getItem(STORE) || '{}'); }
+  catch(e) { return {}; }
+}
+function save(s) { sessionStorage.setItem(STORE, JSON.stringify(s)); }
+
+function getState() {
+  const s = load();
+  return { items: s.items || [], ep: s.ep || '', page: s.page || 'landing' };
+}
+function setState(upd) {
+  const s = { ...getState(), ...upd };
+  save(s);
+  return s;
+}
+
+/* ── URL param processing ── */
+(function() {
+  const p = new URLSearchParams(location.search);
+  const add  = p.get('add');
+  const name = p.get('name') || '';
+  const ep   = p.get('ep')   || '';
+
+  let state = getState();
+
+  // エンドポイントURLを保存（初回のみ）
+  if (ep && !state.ep) state = setState({ ep });
+
+  if (add) {
+    const items = [...state.items];
+    const ex = items.find(i => i.code === add);
+    if (ex) {
+      ex.qty++;
+      toast(`${add} — 数量 ${ex.qty}`, 'ok');
+    } else {
+      items.push({ code: add, name: decodeURIComponent(name), qty: 1 });
+      toast(`${add} を追加しました`, 'ok');
+    }
+    setState({ items, page: 'cart' });
+    history.replaceState(null, '', location.pathname);
+  }
+
+  // ページ表示
+  const curPage = getState().page;
+  showPage(curPage === 'success' ? 'landing' : curPage, false);
+  updateBadge();
+})();
+
+/* ── Navigation ── */
+function showPage(name, persist = true) {
+  document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+  document.getElementById('page-' + name)?.classList.add('active');
+  if (persist) setState({ page: name });
+  window.scrollTo(0, 0);
+  if (name === 'cart') renderCart();
+  if (name === 'checkout') renderCheckout();
+}
+
+/* ── Badge ── */
+function updateBadge() {
+  const n = getState().items.length;
+  const b = document.getElementById('badge');
+  b.textContent = n + ' 品番';
+  b.classList.toggle('hidden', n === 0);
+}
+
+/* ── Cart ── */
+function renderCart() {
+  const { items } = getState();
+  const el = document.getElementById('item-list');
+  if (!items.length) {
+    el.innerHTML = `<div style="padding:32px 20px;text-align:center;color:var(--sand-3);font-size:13px">
+      アイテムがありません<br><small>展示ラベルのQRをスキャンしてください</small></div>`;
+    return;
+  }
+  el.innerHTML = items.map((it, i) => `
+    <div class="item-row" id="row-${i}">
+      <div class="item-info">
+        <div class="item-code">${esc(it.code)}</div>
+        ${it.name ? `<div class="item-name">${esc(it.name)}</div>` : ''}
+      </div>
+      <div class="qty-ctrl">
+        <button class="qty-btn" onclick="changeQty(${i},-1)">−</button>
+        <div class="qty-num">${it.qty}</div>
+        <button class="qty-btn" onclick="changeQty(${i},1)">＋</button>
+      </div>
+      <button class="del-btn" onclick="removeItem(${i})">✕</button>
+    </div>`).join('');
+  updateBadge();
+}
+
+function changeQty(i, d) {
+  const s = getState();
+  s.items[i].qty = Math.max(1, s.items[i].qty + d);
+  setState({ items: s.items });
+  renderCart();
+}
+function removeItem(i) {
+  const s = getState();
+  s.items.splice(i, 1);
+  setState({ items: s.items });
+  if (!s.items.length) showPage('landing');
+  else renderCart();
+}
+function clearCart() {
+  if (!confirm('リストをリセットしますか？')) return;
+  setState({ items: [], page: 'landing' });
+  updateBadge();
+  showPage('landing', false);
+  toast('リセットしました', '');
+}
+
+/* ── Checkout ── */
+function showCheckout() {
+  if (!getState().items.length) { toast('アイテムを選択してください', 'err'); return; }
+  showPage('checkout');
+}
+function renderCheckout() {
+  const { items } = getState();
+  document.getElementById('order-summary').innerHTML =
+    `<strong>${items.length} 品番</strong><br>` +
+    items.map(i => `${esc(i.code)}${i.qty > 1 ? ' ×' + i.qty : ''}${i.name ? ' — ' + esc(i.name) : ''}`).join('<br>');
+}
+
+/* ── Send ── */
+async function sendOrder() {
+  const company = document.getElementById('f-company').value.trim();
+  const name    = document.getElementById('f-name').value.trim();
+  if (!company) { toast('会社名を入力してください', 'err'); document.getElementById('f-company').focus(); return; }
+  if (!name)    { toast('お名前を入力してください', 'err'); document.getElementById('f-name').focus(); return; }
+
+  const state = getState();
+  const ep = state.ep;
+  if (!ep) {
+    toast('送信先が設定されていません。管理者にお問い合わせください。', 'err');
+    return;
+  }
+
+  const payload = {
+    senderCompany: company,
+    senderName: name,
+    sentAt: new Date().toISOString(),
+    items: state.items
+  };
+
+  const btn = document.getElementById('send-btn');
+  btn.disabled = true;
+  btn.textContent = '送信中...';
+
+  try {
+    await fetch(ep, {
+      method: 'POST',
+      mode: 'no-cors',                   // GASはno-corsで問題なく受信できる
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(payload)
+    });
+    // no-corsは成功/失敗が分からないが、GASは確実に受け取る
+    setState({ items: [], page: 'success' });
+    document.getElementById('success-msg').textContent =
+      `${company} ${name} 様のご注文を送信しました。\n担当者からご連絡いたします。`;
+    showPage('success', false);
+    updateBadge();
+  } catch(e) {
+    toast('送信エラー: ' + e.message, 'err');
+    btn.disabled = false;
+    btn.textContent = '送信する';
+  }
+}
+
+function resetAll() {
+  setState({ items: [], page: 'landing', ep: getState().ep });
+  updateBadge();
+  showPage('landing', false);
+}
+
+/* ── Toast ── */
+function toast(msg, type = '') {
+  const wrap = document.getElementById('toast-wrap');
+  const el = document.createElement('div');
+  el.className = `toast ${type}`;
+  el.textContent = msg;
+  wrap.appendChild(el);
+  setTimeout(() => el.remove(), 3000);
+}
+function esc(s) {
+  return String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+}
+</script>
+</body>
+</html>
