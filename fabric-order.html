@@ -104,6 +104,38 @@ html,body{min-height:100%;background:var(--ink-0);color:var(--sand-1);
 /* Added flash */
 @keyframes flash{0%{background:rgba(200,168,74,.18)}100%{background:transparent}}
 .flashed{animation:flash .6s ease}
+
+/* ── QR Scanner overlay ── */
+#scanner-overlay{
+  display:none;
+  position:fixed;inset:0;z-index:500;
+  background:#000;flex-direction:column;align-items:center;justify-content:center;
+}
+#scanner-overlay.active{display:flex}
+#scanner-video{width:100%;max-width:480px;display:block}
+#scanner-canvas{display:none}
+.scanner-frame{
+  position:relative;width:100%;max-width:480px;
+}
+.scanner-aim{
+  position:absolute;inset:0;display:flex;align-items:center;justify-content:center;
+  pointer-events:none;
+}
+.scanner-aim::before{
+  content:'';display:block;
+  width:200px;height:200px;
+  border:2px solid var(--gold);border-radius:12px;
+  box-shadow:0 0 0 2000px rgba(0,0,0,.45);
+}
+.scanner-status{
+  margin-top:20px;font-size:13px;color:var(--sand-3);letter-spacing:.06em;text-align:center;
+  min-height:20px;
+}
+.scanner-close{
+  margin-top:20px;
+  background:var(--ink-4);border:1px solid var(--ink-6);color:var(--sand-1);
+  padding:13px 40px;border-radius:8px;font-size:13px;font-weight:600;cursor:pointer;font-family:inherit;
+}
 </style>
 </head>
 <body>
@@ -118,6 +150,17 @@ html,body{min-height:100%;background:var(--ink-0);color:var(--sand-1);
 </div>
 
 <div class="toast-wrap" id="toast-wrap"></div>
+
+<!-- QR Scanner overlay -->
+<div id="scanner-overlay">
+  <div class="scanner-frame">
+    <video id="scanner-video" playsinline autoplay muted></video>
+    <canvas id="scanner-canvas"></canvas>
+    <div class="scanner-aim"></div>
+  </div>
+  <div class="scanner-status" id="scanner-status">QRコードをフレームに合わせてください</div>
+  <button class="scanner-close" onclick="closeScanner()">✕ キャンセル</button>
+</div>
 
 <!-- ① ランディング -->
 <div class="page active" id="page-landing">
@@ -142,6 +185,7 @@ html,body{min-height:100%;background:var(--ink-0);color:var(--sand-1);
   </div>
   <div class="bottom-bar">
     <button class="btn btn-ghost btn-sm" onclick="clearCart()">リセット</button>
+    <button class="btn btn-ghost btn-sm" onclick="openScanner()" id="scan-more-btn">＋ スキャン</button>
     <button class="btn btn-gold" onclick="showCheckout()">注文する →</button>
   </div>
 </div>
@@ -180,6 +224,7 @@ html,body{min-height:100%;background:var(--ink-0);color:var(--sand-1);
   </div>
 </div>
 
+<script src="https://cdn.jsdelivr.net/npm/jsqr@1.4.0/dist/jsQR.min.js"></script>
 <script>
 const STORE = 'faborder_v2';
 
@@ -209,8 +254,7 @@ function setState(upd) {
 
   let state = getState();
 
-  // エンドポイントURLを保存（初回のみ）
-  if (ep && !state.ep) state = setState({ ep });
+  if (ep) state = setState({ ep });
 
   if (add) {
     const items = [...state.items];
@@ -226,7 +270,6 @@ function setState(upd) {
     history.replaceState(null, '', location.pathname);
   }
 
-  // ページ表示
   const curPage = getState().page;
   showPage(curPage === 'success' ? 'landing' : curPage, false);
   updateBadge();
@@ -256,7 +299,7 @@ function renderCart() {
   const el = document.getElementById('item-list');
   if (!items.length) {
     el.innerHTML = `<div style="padding:32px 20px;text-align:center;color:var(--sand-3);font-size:13px">
-      アイテムがありません<br><small>展示ラベルのQRをスキャンしてください</small></div>`;
+      アイテムがありません<br><small style="margin-top:8px;display:block">下の「＋スキャン」ボタンでQRを読み取ってください</small></div>`;
     return;
   }
   el.innerHTML = items.map((it, i) => `
@@ -336,11 +379,10 @@ async function sendOrder() {
   try {
     await fetch(ep, {
       method: 'POST',
-      mode: 'no-cors',                   // GASはno-corsで問題なく受信できる
+      mode: 'no-cors',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify(payload)
     });
-    // no-corsは成功/失敗が分からないが、GASは確実に受け取る
     setState({ items: [], page: 'success' });
     document.getElementById('success-msg').textContent =
       `${company} ${name} 様のご注文を送信しました。\n担当者からご連絡いたします。`;
@@ -370,6 +412,114 @@ function toast(msg, type = '') {
 }
 function esc(s) {
   return String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+}
+
+/* ══════════════════════════════════════
+   QR SCANNER  (jsQR + getUserMedia)
+══════════════════════════════════════ */
+let _scanStream = null;
+let _scanRafId  = null;
+let _lastCode   = '';
+let _lastTime   = 0;
+
+async function openScanner() {
+  const overlay = document.getElementById('scanner-overlay');
+  overlay.classList.add('active');
+  setStatus('カメラを起動中...');
+  _lastCode = '';
+  try {
+    _scanStream = await navigator.mediaDevices.getUserMedia({
+      video: { facingMode: 'environment', width:{ideal:1280}, height:{ideal:720} }
+    });
+    const video = document.getElementById('scanner-video');
+    video.srcObject = _scanStream;
+    await video.play();
+    setStatus('QRコードをフレームに合わせてください');
+    _scanRafId = requestAnimationFrame(scanTick);
+  } catch(e) {
+    setStatus('カメラを起動できませんでした: ' + e.message);
+  }
+}
+
+function closeScanner() {
+  if (_scanRafId) { cancelAnimationFrame(_scanRafId); _scanRafId = null; }
+  if (_scanStream) { _scanStream.getTracks().forEach(t => t.stop()); _scanStream = null; }
+  const video = document.getElementById('scanner-video');
+  video.srcObject = null;
+  document.getElementById('scanner-overlay').classList.remove('active');
+}
+
+function setStatus(msg) {
+  document.getElementById('scanner-status').textContent = msg;
+}
+
+function scanTick() {
+  const video = document.getElementById('scanner-video');
+  const canvas = document.getElementById('scanner-canvas');
+  if (video.readyState !== video.HAVE_ENOUGH_DATA) {
+    _scanRafId = requestAnimationFrame(scanTick);
+    return;
+  }
+  canvas.width  = video.videoWidth;
+  canvas.height = video.videoHeight;
+  const ctx = canvas.getContext('2d');
+  ctx.drawImage(video, 0, 0, canvas.width, canvas.height);
+  const imgData = ctx.getImageData(0, 0, canvas.width, canvas.height);
+  const result  = jsQR(imgData.data, imgData.width, imgData.height, { inversionAttempts:'dontInvert' });
+  if (result) {
+    const now = Date.now();
+    // 同じコードを2秒以内に連続認識しない
+    if (result.data !== _lastCode || now - _lastTime > 2000) {
+      _lastCode = result.data;
+      _lastTime = now;
+      handleScannedQR(result.data);
+    }
+  }
+  _scanRafId = requestAnimationFrame(scanTick);
+}
+
+function handleScannedQR(raw) {
+  // URLかどうか確認
+  let code = '', name = '', ep = '';
+  try {
+    const url = new URL(raw);
+    code = url.searchParams.get('add') || '';
+    name = url.searchParams.get('name') || '';
+    ep   = url.searchParams.get('ep')   || '';
+  } catch(e) {
+    // URLでなければそのまま品番として扱う
+    code = raw.trim();
+  }
+
+  if (!code) {
+    setStatus('QRコードを認識できませんでした');
+    return;
+  }
+
+  // エンドポイントを保存
+  const state = getState();
+  if (ep && !state.ep) setState({ ep });
+
+  // カートに追加
+  const items = [...getState().items];
+  const ex = items.find(i => i.code === code);
+  if (ex) {
+    ex.qty++;
+    toast(`${code} — 数量 ${ex.qty}`, 'ok');
+    setStatus(`✓ ${code} の数量を増やしました (×${ex.qty})`);
+  } else {
+    items.push({ code, name: decodeURIComponent(name), qty: 1 });
+    toast(`${code} を追加しました`, 'ok');
+    setStatus(`✓ ${code} を追加しました`);
+  }
+  setState({ items, page: 'cart' });
+  updateBadge();
+
+  // 振動フィードバック（対応デバイス）
+  if (navigator.vibrate) navigator.vibrate(80);
+
+  // 1.5秒後にステータスをリセット
+  setTimeout(() => setStatus('続けてスキャンできます'), 1500);
 }
 </script>
 </body>
