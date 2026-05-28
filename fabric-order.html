@@ -105,36 +105,51 @@ html,body{min-height:100%;background:var(--ink-0);color:var(--sand-1);
 @keyframes flash{0%{background:rgba(200,168,74,.18)}100%{background:transparent}}
 .flashed{animation:flash .6s ease}
 
-/* ── QR Scanner overlay ── */
+/* QR Scanner overlay */
 #scanner-overlay{
   display:none;
   position:fixed;inset:0;z-index:500;
-  background:#000;flex-direction:column;align-items:center;justify-content:center;
+  background:#000;flex-direction:column;align-items:stretch;
 }
 #scanner-overlay.active{display:flex}
-#scanner-video{width:100%;max-width:480px;display:block}
-#scanner-canvas{display:none}
-.scanner-frame{
-  position:relative;width:100%;max-width:480px;
+.scanner-topbar{
+  display:flex;justify-content:space-between;align-items:center;
+  padding:14px 16px;background:rgba(0,0,0,.85);
+  flex-shrink:0;border-bottom:1px solid rgba(255,255,255,.12);
 }
+.scanner-topbar-title{color:#fff;font-size:15px;font-weight:600;letter-spacing:.06em}
+.scanner-close{
+  background:rgba(255,255,255,.15);border:1px solid rgba(255,255,255,.3);
+  color:#fff;padding:10px 20px;border-radius:8px;
+  font-size:13px;font-weight:600;cursor:pointer;font-family:inherit;
+}
+.scanner-close:active{background:rgba(255,255,255,.25)}
+.scanner-frame{
+  position:relative;flex:1;min-height:0;overflow:hidden;
+}
+#scanner-video{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;display:block}
+#scanner-canvas{display:none}
 .scanner-aim{
   position:absolute;inset:0;display:flex;align-items:center;justify-content:center;
   pointer-events:none;
 }
 .scanner-aim::before{
   content:'';display:block;
-  width:200px;height:200px;
-  border:2px solid var(--gold);border-radius:12px;
-  box-shadow:0 0 0 2000px rgba(0,0,0,.45);
+  width:220px;height:220px;
+  border:2px solid var(--gold);border-radius:16px;
+  box-shadow:0 0 0 2000px rgba(0,0,0,.5);
 }
 .scanner-status{
-  margin-top:20px;font-size:13px;color:var(--sand-3);letter-spacing:.06em;text-align:center;
-  min-height:20px;
+  position:absolute;bottom:24px;left:0;right:0;
+  text-align:center;font-size:14px;color:rgba(255,255,255,.9);
+  letter-spacing:.04em;padding:8px 20px;
+  text-shadow:0 1px 6px rgba(0,0,0,.9);
+  white-space:pre-line;line-height:1.6;
 }
-.scanner-close{
-  margin-top:20px;
-  background:var(--ink-4);border:1px solid var(--ink-6);color:var(--sand-1);
-  padding:13px 40px;border-radius:8px;font-size:13px;font-weight:600;cursor:pointer;font-family:inherit;
+.scanner-err-hint{
+  position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);
+  text-align:center;color:#fff;padding:24px 20px;width:100%;
+  line-height:1.8;font-size:13px;
 }
 </style>
 </head>
@@ -153,31 +168,39 @@ html,body{min-height:100%;background:var(--ink-0);color:var(--sand-1);
 
 <!-- QR Scanner overlay -->
 <div id="scanner-overlay">
+  <div class="scanner-topbar">
+    <div class="scanner-topbar-title">QRスキャン</div>
+    <button class="scanner-close" onclick="closeScanner()">X 閉じる</button>
+  </div>
   <div class="scanner-frame">
     <video id="scanner-video" playsinline autoplay muted></video>
     <canvas id="scanner-canvas"></canvas>
     <div class="scanner-aim"></div>
+    <div class="scanner-status" id="scanner-status">QRコードをフレームに合わせてください</div>
+    <div class="scanner-err-hint" id="scanner-err-hint" style="display:none"></div>
   </div>
-  <div class="scanner-status" id="scanner-status">QRコードをフレームに合わせてください</div>
-  <button class="scanner-close" onclick="closeScanner()">✕ キャンセル</button>
 </div>
 
-<!-- ① ランディング -->
+<!-- Landing -->
 <div class="page active" id="page-landing">
   <div class="landing">
-    <div class="landing-icon">◻</div>
+    <div class="landing-icon">&#9633;</div>
     <div class="landing-title">FABRIC ORDER</div>
     <div class="landing-sub">展示サンプルのQRコードをスキャンして<br>お気に入りの生地をリストに追加できます</div>
     <div class="scan-hint">
       <div class="scan-hint-ttl">ご利用方法</div>
-      <div class="scan-step"><div class="step-num">1</div><div>展示サンプルに貼られたQRコードをカメラで読み取ってください</div></div>
+      <div class="scan-step"><div class="step-num">1</div><div>展示サンプルのQRコードをスキャンしてください</div></div>
       <div class="scan-step"><div class="step-num">2</div><div>読み取るたびにリストに追加されます</div></div>
       <div class="scan-step"><div class="step-num">3</div><div>「注文する」から会社名とお名前を入力して送信してください</div></div>
     </div>
+    <br>
+    <button class="btn btn-gold" style="max-width:260px;margin:0 auto;display:flex;align-items:center;justify-content:center;gap:8px" onclick="openScanner()">
+      スキャンして開始
+    </button>
   </div>
 </div>
 
-<!-- ② カート -->
+<!-- Cart -->
 <div class="page" id="page-cart">
   <div class="cart-body">
     <div class="section-ttl">選択中のアイテム</div>
@@ -185,12 +208,12 @@ html,body{min-height:100%;background:var(--ink-0);color:var(--sand-1);
   </div>
   <div class="bottom-bar">
     <button class="btn btn-ghost btn-sm" onclick="clearCart()">リセット</button>
-    <button class="btn btn-ghost btn-sm" onclick="openScanner()" id="scan-more-btn">＋ スキャン</button>
-    <button class="btn btn-gold" onclick="showCheckout()">注文する →</button>
+    <button class="btn btn-ghost btn-sm" onclick="openScanner()" id="scan-more-btn">+ スキャン</button>
+    <button class="btn btn-gold" onclick="showCheckout()">注文する</button>
   </div>
 </div>
 
-<!-- ③ チェックアウト -->
+<!-- Checkout -->
 <div class="page" id="page-checkout">
   <div class="form-body">
     <div class="section-ttl">送信者情報</div>
@@ -208,12 +231,12 @@ html,body{min-height:100%;background:var(--ink-0);color:var(--sand-1);
     </div>
   </div>
   <div class="bottom-bar">
-    <button class="btn btn-ghost btn-sm" onclick="showPage('cart')">← 戻る</button>
+    <button class="btn btn-ghost btn-sm" onclick="showPage('cart')">戻る</button>
     <button class="btn btn-gold" id="send-btn" onclick="sendOrder()">送信する</button>
   </div>
 </div>
 
-<!-- ④ 完了 -->
+<!-- Success -->
 <div class="page" id="page-success">
   <div class="success">
     <div class="success-icon">✓</div>
@@ -228,7 +251,6 @@ html,body{min-height:100%;background:var(--ink-0);color:var(--sand-1);
 <script>
 const STORE = 'faborder_v2';
 
-/* ── State ── */
 function load() {
   try { return JSON.parse(sessionStorage.getItem(STORE) || '{}'); }
   catch(e) { return {}; }
@@ -245,37 +267,26 @@ function setState(upd) {
   return s;
 }
 
-/* ── URL param processing ── */
 (function() {
   const p = new URLSearchParams(location.search);
   const add  = p.get('add');
   const name = p.get('name') || '';
   const ep   = p.get('ep')   || '';
-
   let state = getState();
-
   if (ep) state = setState({ ep });
-
   if (add) {
     const items = [...state.items];
     const ex = items.find(i => i.code === add);
-    if (ex) {
-      ex.qty++;
-      toast(`${add} — 数量 ${ex.qty}`, 'ok');
-    } else {
-      items.push({ code: add, name: decodeURIComponent(name), qty: 1 });
-      toast(`${add} を追加しました`, 'ok');
-    }
+    if (ex) { ex.qty++; toast(add + ' — 数量 ' + ex.qty, 'ok'); }
+    else { items.push({ code: add, name: decodeURIComponent(name), qty: 1 }); toast(add + ' を追加しました', 'ok'); }
     setState({ items, page: 'cart' });
     history.replaceState(null, '', location.pathname);
   }
-
   const curPage = getState().page;
   showPage(curPage === 'success' ? 'landing' : curPage, false);
   updateBadge();
 })();
 
-/* ── Navigation ── */
 function showPage(name, persist = true) {
   document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
   document.getElementById('page-' + name)?.classList.add('active');
@@ -285,7 +296,6 @@ function showPage(name, persist = true) {
   if (name === 'checkout') renderCheckout();
 }
 
-/* ── Badge ── */
 function updateBadge() {
   const n = getState().items.length;
   const b = document.getElementById('badge');
@@ -293,28 +303,25 @@ function updateBadge() {
   b.classList.toggle('hidden', n === 0);
 }
 
-/* ── Cart ── */
 function renderCart() {
   const { items } = getState();
   const el = document.getElementById('item-list');
   if (!items.length) {
-    el.innerHTML = `<div style="padding:32px 20px;text-align:center;color:var(--sand-3);font-size:13px">
-      アイテムがありません<br><small style="margin-top:8px;display:block">下の「＋スキャン」ボタンでQRを読み取ってください</small></div>`;
+    el.innerHTML = '<div style="padding:32px 20px;text-align:center;color:var(--sand-3);font-size:13px">アイテムがありません<br><small style="margin-top:8px;display:block">下の「＋スキャン」ボタンでQRを読み取ってください</small></div>';
     return;
   }
-  el.innerHTML = items.map((it, i) => `
-    <div class="item-row" id="row-${i}">
-      <div class="item-info">
-        <div class="item-code">${esc(it.code)}</div>
-        ${it.name ? `<div class="item-name">${esc(it.name)}</div>` : ''}
-      </div>
-      <div class="qty-ctrl">
-        <button class="qty-btn" onclick="changeQty(${i},-1)">−</button>
-        <div class="qty-num">${it.qty}</div>
-        <button class="qty-btn" onclick="changeQty(${i},1)">＋</button>
-      </div>
-      <button class="del-btn" onclick="removeItem(${i})">✕</button>
-    </div>`).join('');
+  el.innerHTML = items.map((it, i) =>
+    '<div class="item-row" id="row-' + i + '">' +
+    '<div class="item-info"><div class="item-code">' + esc(it.code) + '</div>' +
+    (it.name ? '<div class="item-name">' + esc(it.name) + '</div>' : '') + '</div>' +
+    '<div class="qty-ctrl">' +
+    '<button class="qty-btn" onclick="changeQty(' + i + ',-1)">−</button>' +
+    '<div class="qty-num">' + it.qty + '</div>' +
+    '<button class="qty-btn" onclick="changeQty(' + i + ',1)">＋</button>' +
+    '</div>' +
+    '<button class="del-btn" onclick="removeItem(' + i + ')">✕</button>' +
+    '</div>'
+  ).join('');
   updateBadge();
 }
 
@@ -339,7 +346,6 @@ function clearCart() {
   toast('リセットしました', '');
 }
 
-/* ── Checkout ── */
 function showCheckout() {
   if (!getState().items.length) { toast('アイテムを選択してください', 'err'); return; }
   showPage('checkout');
@@ -347,51 +353,30 @@ function showCheckout() {
 function renderCheckout() {
   const { items } = getState();
   document.getElementById('order-summary').innerHTML =
-    `<strong>${items.length} 品番</strong><br>` +
-    items.map(i => `${esc(i.code)}${i.qty > 1 ? ' ×' + i.qty : ''}${i.name ? ' — ' + esc(i.name) : ''}`).join('<br>');
+    '<strong>' + items.length + ' 品番</strong><br>' +
+    items.map(i => esc(i.code) + (i.qty > 1 ? ' x' + i.qty : '') + (i.name ? ' — ' + esc(i.name) : '')).join('<br>');
 }
 
-/* ── Send ── */
 async function sendOrder() {
   const company = document.getElementById('f-company').value.trim();
   const name    = document.getElementById('f-name').value.trim();
   if (!company) { toast('会社名を入力してください', 'err'); document.getElementById('f-company').focus(); return; }
   if (!name)    { toast('お名前を入力してください', 'err'); document.getElementById('f-name').focus(); return; }
-
   const state = getState();
   const ep = state.ep;
-  if (!ep) {
-    toast('送信先が設定されていません。管理者にお問い合わせください。', 'err');
-    return;
-  }
-
-  const payload = {
-    senderCompany: company,
-    senderName: name,
-    sentAt: new Date().toISOString(),
-    items: state.items
-  };
-
+  if (!ep) { toast('送信先が設定されていません。管理者にお問い合わせください。', 'err'); return; }
+  const payload = { senderCompany: company, senderName: name, sentAt: new Date().toISOString(), items: state.items };
   const btn = document.getElementById('send-btn');
-  btn.disabled = true;
-  btn.textContent = '送信中...';
-
+  btn.disabled = true; btn.textContent = '送信中...';
   try {
-    await fetch(ep, {
-      method: 'POST',
-      mode: 'no-cors',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify(payload)
-    });
+    await fetch(ep, { method: 'POST', mode: 'no-cors', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(payload) });
     setState({ items: [], page: 'success' });
-    document.getElementById('success-msg').textContent =
-      `${company} ${name} 様のご注文を送信しました。\n担当者からご連絡いたします。`;
+    document.getElementById('success-msg').textContent = company + ' ' + name + ' 様のご注文を送信しました。\n担当者からご連絡いたします。';
     showPage('success', false);
     updateBadge();
   } catch(e) {
     toast('送信エラー: ' + e.message, 'err');
-    btn.disabled = false;
-    btn.textContent = '送信する';
+    btn.disabled = false; btn.textContent = '送信する';
   }
 }
 
@@ -401,11 +386,11 @@ function resetAll() {
   showPage('landing', false);
 }
 
-/* ── Toast ── */
-function toast(msg, type = '') {
+function toast(msg, type) {
+  type = type || '';
   const wrap = document.getElementById('toast-wrap');
   const el = document.createElement('div');
-  el.className = `toast ${type}`;
+  el.className = 'toast ' + type;
   el.textContent = msg;
   wrap.appendChild(el);
   setTimeout(() => el.remove(), 3000);
@@ -414,9 +399,7 @@ function esc(s) {
   return String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
 }
 
-/* ══════════════════════════════════════
-   QR SCANNER  (jsQR + getUserMedia)
-══════════════════════════════════════ */
+/* QR SCANNER */
 let _scanStream = null;
 let _scanRafId  = null;
 let _lastCode   = '';
@@ -426,19 +409,36 @@ async function openScanner() {
   const overlay = document.getElementById('scanner-overlay');
   overlay.classList.add('active');
   setStatus('カメラを起動中...');
+  setErrHint('');
   _lastCode = '';
   try {
-    _scanStream = await navigator.mediaDevices.getUserMedia({
-      video: { facingMode: 'environment', width:{ideal:1280}, height:{ideal:720} }
-    });
+    try {
+      _scanStream = await navigator.mediaDevices.getUserMedia({ video: { facingMode: { ideal: 'environment' }, width:{ideal:1280}, height:{ideal:720} } });
+    } catch(e2) {
+      _scanStream = await navigator.mediaDevices.getUserMedia({ video: true });
+    }
     const video = document.getElementById('scanner-video');
     video.srcObject = _scanStream;
     await video.play();
     setStatus('QRコードをフレームに合わせてください');
     _scanRafId = requestAnimationFrame(scanTick);
   } catch(e) {
-    setStatus('カメラを起動できませんでした: ' + e.message);
+    if (e.name === 'NotAllowedError' || e.name === 'PermissionDeniedError') {
+      setStatus('');
+      setErrHint('カメラへのアクセスが拒否されました\n\niPhone: 設定 → Safari → カメラ → 許可\nAndroid: アドレスバー横の鍵アイコン → カメラを許可\n\n設定変更後、ページを再読み込みしてください');
+    } else if (e.name === 'NotFoundError') {
+      setStatus('カメラが見つかりません');
+    } else {
+      setStatus('カメラを起動できませんでした: ' + e.message);
+    }
   }
+}
+
+function setErrHint(msg) {
+  const el = document.getElementById('scanner-err-hint');
+  if (!el) return;
+  el.style.display = msg ? 'block' : 'none';
+  el.textContent = msg;
 }
 
 function closeScanner() {
@@ -468,7 +468,6 @@ function scanTick() {
   const result  = jsQR(imgData.data, imgData.width, imgData.height, { inversionAttempts:'dontInvert' });
   if (result) {
     const now = Date.now();
-    // 同じコードを2秒以内に連続認識しない
     if (result.data !== _lastCode || now - _lastTime > 2000) {
       _lastCode = result.data;
       _lastTime = now;
@@ -479,7 +478,6 @@ function scanTick() {
 }
 
 function handleScannedQR(raw) {
-  // URLかどうか確認
   let code = '', name = '', ep = '';
   try {
     const url = new URL(raw);
@@ -487,38 +485,25 @@ function handleScannedQR(raw) {
     name = url.searchParams.get('name') || '';
     ep   = url.searchParams.get('ep')   || '';
   } catch(e) {
-    // URLでなければそのまま品番として扱う
     code = raw.trim();
   }
-
-  if (!code) {
-    setStatus('QRコードを認識できませんでした');
-    return;
-  }
-
-  // エンドポイントを保存
+  if (!code) { setStatus('QRコードを認識できませんでした'); return; }
   const state = getState();
   if (ep && !state.ep) setState({ ep });
-
-  // カートに追加
   const items = [...getState().items];
   const ex = items.find(i => i.code === code);
   if (ex) {
     ex.qty++;
-    toast(`${code} — 数量 ${ex.qty}`, 'ok');
-    setStatus(`✓ ${code} の数量を増やしました (×${ex.qty})`);
+    toast(code + ' — 数量 ' + ex.qty, 'ok');
+    setStatus('✓ ' + code + ' の数量を増やしました (x' + ex.qty + ')');
   } else {
     items.push({ code, name: decodeURIComponent(name), qty: 1 });
-    toast(`${code} を追加しました`, 'ok');
-    setStatus(`✓ ${code} を追加しました`);
+    toast(code + ' を追加しました', 'ok');
+    setStatus('✓ ' + code + ' を追加しました');
   }
   setState({ items, page: 'cart' });
   updateBadge();
-
-  // 振動フィードバック（対応デバイス）
   if (navigator.vibrate) navigator.vibrate(80);
-
-  // 1.5秒後にステータスをリセット
   setTimeout(() => setStatus('続けてスキャンできます'), 1500);
 }
 </script>
