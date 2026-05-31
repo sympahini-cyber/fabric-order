@@ -5,25 +5,22 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>FABRIC QR SYSTEM</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@200;300;400;500;600&family=Cormorant+Garamond:wght@300;400&display=swap" rel="stylesheet">
-<script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/qrcode-generator/1.4.4/qrcode.min.js"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@200;300;400;500;600&display=swap" rel="stylesheet">
 <style>
 :root {
-  /* SOKI Atami — 石・木・湯 */
-  --ink-0:#080609;--ink-1:#0D0B10;--ink-2:#141219;--ink-3:#1B1922;
-  --ink-4:#22202B;--ink-5:#2C2A36;--ink-6:#3A3846;--ink-7:#564E5E;
-  --sand-1:#EDE6D8;--sand-2:#C6BBA8;--sand-3:#887C6C;--sand-4:#524A3C;
-  --gold:#C0BCBA;--gold-hi:#D4D0CE;--gold-lo:#6A6462;
-  --gold-10:rgba(192,188,186,.10);--gold-18:rgba(192,188,186,.18);
-  --gold-30:rgba(192,188,186,.30);
-  --ruby:#A04040;--ruby-10:rgba(160,64,64,.10);--ruby-30:rgba(160,64,64,.30);
-  --sage:#4E7A5C;--sage-10:rgba(78,122,92,.10);
+  --ink-0:#050505;--ink-1:#0c0c0c;--ink-2:#131313;--ink-3:#1a1a1a;
+  --ink-4:#222222;--ink-5:#2c2c2c;--ink-6:#383838;--ink-7:#4a4a4a;
+  --sand-1:#f0ece6;--sand-2:#c4bcb2;--sand-3:#857d73;--sand-4:#514840;
+  --gold:#C8A84A;--gold-hi:#E4C46A;--gold-lo:#A08830;
+  --gold-10:rgba(200,168,74,.10);--gold-18:rgba(200,168,74,.18);
+  --gold-30:rgba(200,168,74,.30);
+  --ruby:#B85448;--ruby-10:rgba(184,84,72,.10);--ruby-30:rgba(184,84,72,.30);
+  --sage:#6A9E82;--sage-10:rgba(106,158,130,.10);
   --sb-w:252px;--hdr-h:56px;--r:5px;--rl:10px;--rxl:14px;
 }
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
 html,body{height:100%;background:var(--ink-0);color:var(--sand-1);
-  font-family:'Yu Gothic','游ゴシック','YuGothic','Inter','Helvetica Neue',Arial,'Hiragino Sans',sans-serif;
+  font-family:'Inter','Helvetica Neue',Arial,'Hiragino Sans','Yu Gothic UI',sans-serif;
   font-size:13.5px;line-height:1.65;-webkit-font-smoothing:antialiased}
 #app{display:flex;height:100vh;overflow:hidden}
 #sidebar{width:var(--sb-w);flex-shrink:0;background:var(--ink-1);
@@ -35,8 +32,8 @@ html,body{height:100%;background:var(--ink-0);color:var(--sand-1);
 .sb-brand{padding:24px 22px 20px;border-bottom:1px solid var(--ink-5);
   display:flex;align-items:center;gap:14px;position:relative}
 .sb-brand-text{display:flex;flex-direction:column;gap:2px}
-.sb-brand-name{font-size:15px;font-weight:300;letter-spacing:.28em;font-family:'Cormorant Garamond',Georgia,serif}
-.sb-brand-name em{font-style:italic;color:var(--gold);font-weight:400}
+.sb-brand-name{font-size:14px;font-weight:300;letter-spacing:.28em}
+.sb-brand-name em{font-style:normal;color:var(--gold);font-weight:600}
 .sb-brand-sub{font-size:8.5px;letter-spacing:.22em;color:var(--ink-7);text-transform:uppercase}
 .sb-nav{flex:1;overflow-y:auto;padding:8px 0}
 .sb-sec{padding:18px 22px 5px;font-size:8.5px;letter-spacing:.22em;
@@ -66,7 +63,7 @@ html,body{height:100%;background:var(--ink-0);color:var(--sand-1);
   letter-spacing:.22em;color:var(--sand-3);text-transform:uppercase;white-space:nowrap}
 .pg-rule{width:1px;height:18px;background:var(--ink-5)}
 .pg-ic{color:var(--gold);font-size:14px}
-.hdr-acts{display:flex;gap:8px;align-items:center;flex-shrink:0;flex-wrap:wrap}
+.hdr-acts{display:flex;gap:8px;align-items:center;flex-shrink:0}
 .pg-body{flex:1;overflow-y:auto;padding:28px}
 .page{display:none;height:100%;flex-direction:column}
 .page.active{display:flex;animation:pg-in .22s ease}
@@ -99,7 +96,8 @@ html,body{height:100%;background:var(--ink-0);color:var(--sand-1);
   color:#000;box-shadow:0 1px 8px rgba(200,168,74,.25)}
 .btn-p:hover{background:linear-gradient(135deg,var(--gold-hi) 0%,var(--gold) 100%);
   box-shadow:0 2px 14px rgba(200,168,74,.40);transform:translateY(-1px)}
-.btn-p:active{transform:translateY(0)}
+.btn-p:active{transform:translateY(0)
+}
 .btn-s{background:var(--ink-4);color:var(--sand-2);border:1px solid var(--ink-5)}
 .btn-s:hover{background:var(--ink-5);color:var(--sand-1);border-color:var(--ink-6)}
 .btn-g{background:transparent;color:var(--sand-3);border:1px solid var(--ink-5)}
@@ -127,6 +125,35 @@ tbody tr:hover{background:var(--ink-3)}
 tbody td{padding:10px 14px;font-size:12.5px;color:var(--sand-1)}
 .td-mono{font-family:'SF Mono','Fira Code','Consolas',monospace;color:var(--gold);font-size:12px;letter-spacing:.03em}
 .td-dim{color:var(--sand-3);font-size:12px}
+.dz{border:1px dashed var(--ink-6);border-radius:var(--rxl);padding:54px 24px;
+  text-align:center;cursor:pointer;transition:all .20s;background:var(--ink-2);
+  position:relative;overflow:hidden}
+.dz::before{content:'';position:absolute;inset:0;
+  background:radial-gradient(ellipse at 50% 0%,var(--gold-10) 0%,transparent 70%);
+  opacity:0;transition:opacity .20s;pointer-events:none}
+.dz:hover::before,.dz.over::before{opacity:1}
+.dz:hover,.dz.over{border-color:var(--gold-30)}
+.qr-grid{display:grid;grid-template-columns:repeat(5,1fr);
+  border:1px solid var(--ink-5);border-radius:var(--r);overflow:hidden}
+.qr-cell{padding:12px 8px;display:flex;flex-direction:column;align-items:center;
+  gap:6px;border-right:1px solid var(--ink-4);border-bottom:1px solid var(--ink-4);transition:background .12s}
+.qr-cell:hover{background:var(--ink-3)}.qr-cell:nth-child(5n){border-right:none}
+.qr-code{font-family:'SF Mono','Consolas',monospace;font-size:9px;color:var(--sand-3);
+  text-align:center;word-break:break-all}
+.qr-name{font-size:8px;color:var(--ink-7);text-align:center;overflow:hidden;max-width:100%;white-space:nowrap;text-overflow:ellipsis}
+/* スワッチラベル プレビュー */
+.lbl2-grid{display:flex;flex-direction:column;border:1px solid var(--ink-5);border-radius:var(--r);overflow:hidden}
+.lbl2-sep{text-align:center;font-size:10px;letter-spacing:0;padding:2px 0;background:var(--ink-3);color:var(--sand-4);overflow:hidden;white-space:nowrap;border-bottom:1px solid var(--ink-4)}
+.lbl2-cell{display:flex;border-bottom:1px solid var(--ink-4)}
+.lbl2-cell-info{flex:0 0 65%;padding:6px 10px}
+.lbl2-cell-swatch{flex:0 0 35%;border-left:1px solid var(--ink-5);display:flex;align-items:center;justify-content:center;color:var(--sand-6);font-size:8px;letter-spacing:.1em;background:var(--ink-2)}
+.lbl-frow{display:flex;gap:4px;align-items:baseline;margin-bottom:3px;border-bottom:1px solid var(--ink-4);padding-bottom:3px}
+.lbl-fkey{font-size:9px;color:var(--sand-4);min-width:72px;flex-shrink:0;letter-spacing:.02em}
+.lbl-fval{font-size:10px;color:var(--sand-1)}
+/* 送付履歴カード */
+.hist-card{background:var(--ink-2);border:1px solid var(--ink-4);border-radius:var(--rl);padding:20px}
+.hist-card:hover{border-color:var(--ink-5)}
+
 #toast-wrap{position:fixed;bottom:24px;right:24px;z-index:9999;display:flex;flex-direction:column;gap:8px}
 .toast{display:flex;align-items:center;gap:10px;padding:11px 16px;
   background:var(--ink-4);border:1px solid var(--ink-6);border-radius:var(--r);
@@ -139,14 +166,11 @@ tbody td{padding:10px 14px;font-size:12.5px;color:var(--sand-1)}
   backdrop-filter:blur(4px);z-index:1000;align-items:center;justify-content:center}
 #modal-bg.on{display:flex}
 .modal{background:var(--ink-2);border:1px solid var(--ink-5);border-radius:var(--rxl);
-  padding:28px;width:100%;max-width:520px;box-shadow:0 20px 60px rgba(0,0,0,.7);
-  animation:mi .20s ease;max-height:90vh;overflow-y:auto}
-.modal-wide{max-width:680px}
+  padding:28px;width:100%;max-width:468px;box-shadow:0 20px 60px rgba(0,0,0,.7);
+  animation:mi .20s ease}
 @keyframes mi{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:translateY(0)}}
-.modal-ttl{font-size:14px;font-weight:500;letter-spacing:.04em;margin-bottom:20px;
-  padding-bottom:14px;border-bottom:1px solid var(--ink-4)}
-.modal-acts{display:flex;justify-content:flex-end;gap:8px;
-  margin-top:20px;padding-top:14px;border-top:1px solid var(--ink-4)}
+.modal-ttl{font-size:14px;font-weight:500;letter-spacing:.04em;margin-bottom:20px}
+.modal-acts{display:flex;justify-content:flex-end;gap:8px;margin-top:20px}
 .cc{background:var(--ink-2);border:1px solid var(--ink-4);border-radius:var(--rl);padding:20px;transition:all .16s}
 .cc:hover{border-color:var(--ink-5);background:var(--ink-3)}
 .cc.ac{border-color:var(--gold-30);background:var(--gold-10)}
@@ -156,8 +180,17 @@ tbody td{padding:10px 14px;font-size:12.5px;color:var(--sand-1)}
 .tag{display:inline-flex;align-items:center;padding:2px 9px;border-radius:3px;
   font-size:9.5px;font-weight:600;letter-spacing:.06em}
 .tag-g{background:var(--gold-10);color:var(--gold);border:1px solid var(--gold-30)}
-.tag-r{background:var(--ruby-10);color:var(--ruby);border:1px solid var(--ruby-30)}
 .tag-gr{background:var(--sage-10);color:var(--sage);border:1px solid rgba(106,158,130,.3)}
+.qa-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(120px,1fr));gap:12px}
+.qa{background:var(--ink-2);border:1px solid var(--ink-4);border-radius:var(--rl);
+  padding:20px 14px 18px;cursor:pointer;text-align:center;transition:all .16s;
+  position:relative;overflow:hidden}
+.qa::after{content:'';position:absolute;inset:0;
+  background:radial-gradient(ellipse at 50% 0%,var(--gold-10) 0%,transparent 70%);
+  opacity:0;transition:opacity .20s;pointer-events:none}
+.qa:hover{border-color:var(--gold-30)}.qa:hover::after{opacity:1}
+.qa-ic{font-size:22px;margin-bottom:10px;display:block;position:relative}
+.qa-lbl{font-size:11px;letter-spacing:.06em;color:var(--sand-3);position:relative;font-weight:500}
 .banner{background:var(--ink-2);border:1px solid var(--ink-4);
   border-radius:var(--rl);padding:18px 22px;display:flex;align-items:center;gap:18px;margin-bottom:22px}
 .banner.warn{border-color:var(--gold-18);background:var(--gold-10)}
@@ -168,45 +201,6 @@ tbody td{padding:10px 14px;font-size:12.5px;color:var(--sand-1)}
 .empty{display:flex;flex-direction:column;align-items:center;justify-content:center;padding:70px 24px;text-align:center}
 .empty-ic{font-size:32px;color:var(--ink-6);margin-bottom:14px}
 .empty-txt{font-size:13px;color:var(--sand-4)}.empty-sub{font-size:12px;color:var(--ink-7);margin-top:6px}
-.qa-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(130px,1fr));gap:12px}
-.qa{background:var(--ink-2);border:1px solid var(--ink-4);border-radius:var(--rl);
-  padding:20px 14px 18px;cursor:pointer;text-align:center;transition:all .16s;
-  position:relative;overflow:hidden}
-.qa::after{content:'';position:absolute;inset:0;
-  background:radial-gradient(ellipse at 50% 0%,var(--gold-10) 0%,transparent 70%);
-  opacity:0;transition:opacity .20s;pointer-events:none}
-.qa:hover{border-color:var(--gold-30)}.qa:hover::after{opacity:1}
-.qa-ic{font-size:22px;margin-bottom:10px;display:block;position:relative}
-.qa-lbl{font-size:11px;letter-spacing:.06em;color:var(--sand-3);position:relative;font-weight:500}
-/* QR Print grid */
-.qr-grid-p{display:grid;grid-template-columns:repeat(auto-fill,minmax(130px,1fr));gap:10px}
-.qr-cell{background:var(--ink-2);border:1px solid var(--ink-4);border-radius:var(--rl);
-  padding:14px 10px;display:flex;flex-direction:column;align-items:center;gap:8px;
-  cursor:pointer;transition:all .14s;position:relative;user-select:none}
-.qr-cell:hover{border-color:var(--gold-30);background:var(--ink-3)}
-.qr-cell.sel{border-color:var(--gold);background:var(--gold-10)}
-.qr-cell.sel::before{content:'✓';position:absolute;top:6px;right:8px;
-  font-size:10px;color:var(--gold);font-weight:600}
-.qr-code{font-size:9px;color:var(--sand-3);text-align:center;font-family:'SF Mono','Consolas',monospace}
-.qr-name{font-size:8px;color:var(--ink-7);text-align:center;overflow:hidden;max-width:100%;white-space:nowrap;text-overflow:ellipsis}
-/* Inbox */
-.inbox-card{background:var(--ink-2);border:1px solid var(--ink-4);border-radius:var(--rl);
-  padding:18px 20px;margin-bottom:10px;transition:border-color .16s}
-.inbox-card:hover{border-color:var(--ink-5)}
-/* Send label 2-col */
-.lbl2-grid{display:grid;grid-template-columns:1fr 1fr;
-  border:1px solid var(--ink-5);border-radius:var(--r);overflow:hidden}
-.lbl2-cell{padding:14px 16px;border-right:1px solid var(--ink-4);border-bottom:1px solid var(--ink-4)}
-.lbl2-cell:nth-child(2n){border-right:none}
-.lbl-frow{display:flex;gap:8px;align-items:baseline;margin-bottom:5px}
-.lbl-fkey{font-size:9px;color:var(--sand-4);min-width:80px;flex-shrink:0;letter-spacing:.02em}
-.lbl-fval{font-size:11px;color:var(--sand-1)}
-.lbl-fval.big{font-size:13px;font-weight:600;font-family:'SF Mono','Consolas',monospace;color:var(--gold)}
-/* History */
-.hist-card{background:var(--ink-2);border:1px solid var(--ink-4);border-radius:var(--rl);
-  padding:20px;margin-bottom:12px;transition:border-color .16s}
-.hist-card:hover{border-color:var(--ink-5)}
-/* Helpers */
 .flex{display:flex}.flex-1{flex:1}.ic{align-items:center}.jb{justify-content:space-between}
 .gap6{gap:6px}.gap8{gap:8px}.gap12{gap:12px}.gap16{gap:16px}.gap20{gap:20px}
 .mb8{margin-bottom:8px}.mb12{margin-bottom:12px}.mb16{margin-bottom:16px}
@@ -220,27 +214,20 @@ tbody td{padding:10px 14px;font-size:12.5px;color:var(--sand-1)}
 ::-webkit-scrollbar{width:4px}::-webkit-scrollbar-track{background:transparent}
 ::-webkit-scrollbar-thumb{background:var(--ink-5);border-radius:2px}
 ::-webkit-scrollbar-thumb:hover{background:var(--ink-6)}
-/* Print */
-#print-area{display:none}
-@media print{
-  #sidebar,.pg-hdr,.no-print{display:none!important}
-  body{background:#fff;color:#000}#app{display:block}
-  #print-area{display:block!important}
-  *{-webkit-print-color-adjust:exact;print-color-adjust:exact}
-  @page{margin:8mm}
-}
+@media print{#sidebar,.pg-hdr,.no-print{display:none!important}
+  body{background:white;color:black}#app{display:block}
+  *{-webkit-print-color-adjust:exact;print-color-adjust:exact}}
 </style>
 </head>
 <body>
 <div id="app">
 
-<!-- ════ SIDEBAR ════ -->
 <nav id="sidebar">
   <div class="sb-brand">
     <svg width="34" height="34" viewBox="0 0 34 34" fill="none">
-      <polygon points="17,3 31,17 17,31 3,17" stroke="#C8A84A" stroke-width="1.2" fill="none"/>
-      <polygon points="17,9 25,17 17,25 9,17" fill="#C8A84A" fill-opacity="0.18"/>
-      <polygon points="17,13 21,17 17,21 13,17" fill="#C8A84A" fill-opacity="0.55"/>
+      <polygon points="17,3 31,17 17,31 3,17" stroke="#C8A84A" stroke-width="1.2" fill="none"\/>
+      <polygon points="17,9 25,17 17,25 9,17" fill="#C8A84A" fill-opacity="0.18"\/>
+      <polygon points="17,13 21,17 17,21 13,17" fill="#C8A84A" fill-opacity="0.55"\/>
     </svg>
     <div class="sb-brand-text">
       <div class="sb-brand-name">FABRIC<em>QR</em></div>
@@ -260,21 +247,18 @@ tbody td{padding:10px 14px;font-size:12.5px;color:var(--sand-1)}
     <div class="sb-sec">Operations</div>
     <ul class="nav-list">
       <li class="nav-item" data-page="cases"><span class="nav-ic">&#x229F;</span><span>案件管理</span><span class="nav-badge" id="bdg-c">0</span></li>
-      <li class="nav-item" data-page="sendprint"><span class="nav-ic">&#x22A1;</span><span>送付印刷</span></li>
+      <li class="nav-item" data-page="labels"><span class="nav-ic">&#x22A1;</span><span>送付印刷</span></li>
       <li class="nav-item" data-page="history"><span class="nav-ic">&#x25D7;</span><span>送付履歴</span><span class="nav-badge" id="bdg-h">0</span></li>
-      <li class="nav-item" data-page="inbox"><span class="nav-ic">&#x2709;</span><span>受信ボックス</span><span class="nav-badge" id="bdg-i">0</span></li>
     </ul>
     <div class="sb-sec">System</div>
     <ul class="nav-list">
       <li class="nav-item" data-page="settings"><span class="nav-ic">&#x25C8;</span><span>設定</span></li>
     </ul>
   </div>
-  <div class="sb-footer"><div class="sb-dot"></div><span>v4.0 &nbsp;&#183;&nbsp; 稼働中</span></div>
+  <div class="sb-footer"><div class="sb-dot"></div><span>v2.1 &nbsp;&#183;&nbsp; 稼働中</span></div>
 </nav>
 
-<!-- ════ MAIN ════ -->
 <main id="main">
-
   <!-- Dashboard -->
   <div id="page-dashboard" class="page">
     <div class="pg-hdr">
@@ -282,17 +266,16 @@ tbody td{padding:10px 14px;font-size:12.5px;color:var(--sand-1)}
     </div>
     <div class="pg-body" id="dash-body"></div>
   </div>
-
   <!-- Master -->
   <div id="page-master" class="page">
     <div class="pg-hdr">
       <div class="pg-title"><span class="pg-ic">&#x229E;</span><span class="pg-rule"></span><span>Master Data</span></div>
       <div class="hdr-acts">
-        <button class="btn btn-g btn-sm" onclick="exportCSV()">&#x2193; CSV出力</button>
-        <label class="btn btn-s btn-sm" style="cursor:pointer">&#x21BA; クリア取込<input type="file" accept=".csv,.xlsx,.xlsm" multiple style="display:none" onchange="importFiles(this,true)"></label>
-        <label class="btn btn-s btn-sm" style="cursor:pointer">&#x2191; XLSX取込<input type="file" accept=".xlsx,.xlsm" multiple style="display:none" onchange="importFiles(this,false)"></label>
-        <label class="btn btn-s btn-sm" style="cursor:pointer">&#x2191; CSV取込<input type="file" accept=".csv" multiple style="display:none" onchange="importFiles(this,false)"></label>
-        <button class="btn btn-p btn-sm" onclick="openFabricModal(null)">&#xFF0B; 新規追加</button>
+        <button class="btn btn-g btn-sm" onclick="exportMasterCSV()">&#x2193; CSV出力</button>
+        <button class="btn btn-s btn-sm" onclick="clrImport()" title="マスタをクリアしてから取込">&#x21BA; クリア取込</button>
+        <button class="btn btn-p btn-sm" onclick="document.getElementById('csv-in').click()">&#x2191; 取込</button>
+        <button class="btn btn-p btn-sm" onclick="addMstRow()">&#xFF0B; 新規追加</button>
+        <input type="file" id="csv-in" accept=".csv,.xlsx,.xls" multiple style="display:none">
       </div>
     </div>
     <div class="pg-body">
@@ -303,77 +286,52 @@ tbody td{padding:10px 14px;font-size:12.5px;color:var(--sand-1)}
       <div class="tbl-wrap">
         <table>
           <thead><tr>
+            <th style="width:34px"><input type="checkbox" class="chk" id="chk-all" onchange="togSelAll()"></th>
             <th>品番</th><th>品名</th><th>生地巾</th><th>目付</th><th>混率</th><th>使用糸</th><th>備考</th><th></th>
           </tr></thead>
           <tbody id="mst-tbody"></tbody>
         </table>
       </div>
+      <div id="mst-pag" class="flex ic gap8" style="margin-top:16px;justify-content:center"></div>
     </div>
   </div>
-
   <!-- QR Print -->
   <div id="page-qrprint" class="page">
     <div class="pg-hdr">
       <div class="pg-title"><span class="pg-ic">&#x22A0;</span><span class="pg-rule"></span><span>QR Print</span></div>
       <div class="hdr-acts">
-        <span class="text-sm text-d" id="qr-sel-cnt"></span>
-        <button class="btn btn-g btn-sm" onclick="selectAllQR(true)">全選択</button>
-        <button class="btn btn-g btn-sm" onclick="selectAllQR(false)">クリア</button>
-        <button class="btn btn-p btn-sm" onclick="printQRLabels()">&#x2399; 印刷</button>
+        <span class="text-sm text-d" id="qr-cnt">0 件選択</span>
+        <button class="btn btn-g btn-sm" onclick="clrQR()">クリア</button>
+        <button class="btn btn-p btn-sm" onclick="printQR()">印刷</button>
       </div>
     </div>
-    <div class="pg-body">
-      <div class="flex ic gap8 mb16">
-        <input type="text" class="inp" id="qr-search" placeholder="品番・品名で検索..." oninput="renderQRP()" style="max-width:300px">
-      </div>
-      <div id="qr-grid-wrap"></div>
-      <div id="qr-preview-area" style="display:none">
-        <div class="divider"></div>
-        <div class="text-xs text-d mb12">印刷プレビュー</div>
-        <div id="qr-preview-labels" class="flex" style="flex-wrap:wrap;gap:12px"></div>
-      </div>
-    </div>
+    <div class="pg-body" id="qrprint-body"></div>
   </div>
-
   <!-- Cases -->
   <div id="page-cases" class="page">
     <div class="pg-hdr">
       <div class="pg-title"><span class="pg-ic">&#x229F;</span><span class="pg-rule"></span><span>Cases</span></div>
-      <div class="hdr-acts"><button class="btn btn-p btn-sm" onclick="openCaseModal(null)">&#xFF0B; 新規案件</button></div>
+      <div class="hdr-acts"><button class="btn btn-p btn-sm" onclick="showNCM()">+ 新規案件</button></div>
     </div>
     <div class="pg-body" id="cases-body"></div>
   </div>
-
-  <!-- Send Print -->
-  <div id="page-sendprint" class="page">
+  <!-- Send & Print -->
+  <div id="page-labels" class="page">
     <div class="pg-hdr">
       <div class="pg-title"><span class="pg-ic">&#x22A1;</span><span class="pg-rule"></span><span>Send &amp; Print</span></div>
       <div class="hdr-acts">
-        <select class="inp" id="sp-select" style="width:220px;padding:6px 12px;font-size:12px" onchange="renderSendPrint()"></select>
+        <select class="inp" id="lbl-sel" style="width:200px;padding:5px 12px;font-size:12px" onchange="renderLP()"></select>
       </div>
     </div>
-    <div class="pg-body" id="sp-body"></div>
+    <div class="pg-body" id="labels-body"></div>
   </div>
-
-  <!-- Inbox -->
-  <div id="page-inbox" class="page">
-    <div class="pg-hdr">
-      <div class="pg-title"><span class="pg-ic">&#x2709;</span><span class="pg-rule"></span><span>Inbox</span></div>
-      <div class="hdr-acts">
-        <button class="btn btn-p btn-sm" onclick="fetchInbox()">&#x21BB; 受信取得</button>
-      </div>
-    </div>
-    <div class="pg-body" id="inbox-body"></div>
-  </div>
-
-  <!-- History -->
+  <!-- Send History -->
   <div id="page-history" class="page">
     <div class="pg-hdr">
       <div class="pg-title"><span class="pg-ic">&#x25D7;</span><span class="pg-rule"></span><span>Send History</span></div>
     </div>
-    <div class="pg-body" id="hist-body"></div>
+    <div class="pg-body" id="history-body"></div>
   </div>
-
   <!-- Settings -->
   <div id="page-settings" class="page">
     <div class="pg-hdr">
@@ -382,745 +340,827 @@ tbody td{padding:10px 14px;font-size:12.5px;color:var(--sand-1)}
     </div>
     <div class="pg-body" id="settings-body"></div>
   </div>
-
 </main>
-</div><!-- /app -->
+</div>
 
-<!-- Single Modal -->
 <div id="modal-bg"><div class="modal" id="modal-box"></div></div>
-
-<!-- Toast -->
 <div id="toast-wrap"></div>
 
-<!-- Print Area -->
-<div id="print-area"></div>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/qrcode-generator/1.4.4/qrcode.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jsQR/1.4.0/jsQR.min.js"></script>
 
-<!-- ════════════════════════════════════════
-     JAVASCRIPT
-════════════════════════════════════════ -->
 <script>
-'use strict';
 
-/* ────────────────────────────────
-   1. STATE & PERSISTENCE
-──────────────────────────────── */
-const K = {F:'fqms_fabrics', C:'fqms_cases', H:'fqms_history', S:'fqms_settings', I:'fqms_inbox'};
+/* ═══════════════════════════════════════════
+   FABRIC QR SYSTEM  v2.1
+   送付印刷・送付履歴対応版
+═══════════════════════════════════════════ */
 
-function load(key, def) {
-  try { const v = localStorage.getItem(key); return v ? JSON.parse(v) : def; } catch { return def; }
+/* ── State ── */
+const S = {
+  master: [], cases: [], history: [],
+  activeCaseId: null,
+  settings: { companyName: '', qrUrl: '' },
+  page: 'dashboard',
+  qrSel: new Set(),
+};
+
+/* ── Persistence ── */
+function saveS() {
+  try {
+    localStorage.setItem('fqr2_m', JSON.stringify(S.master));
+    localStorage.setItem('fqr2_c', JSON.stringify(S.cases));
+    localStorage.setItem('fqr2_h', JSON.stringify(S.history));
+    localStorage.setItem('fqr2_a', S.activeCaseId || '');
+    localStorage.setItem('fqr2_s', JSON.stringify(S.settings));
+  } catch(e) { toast('保存エラー', 'err'); }
 }
-function save(key, val) { localStorage.setItem(key, JSON.stringify(val)); }
+function loadS() {
+  try {
+    const m=localStorage.getItem('fqr2_m'), c=localStorage.getItem('fqr2_c'),
+          h=localStorage.getItem('fqr2_h'), a=localStorage.getItem('fqr2_a'),
+          s=localStorage.getItem('fqr2_s');
+    if(m) S.master   = JSON.parse(m);
+    if(c) S.cases    = JSON.parse(c);
+    if(h) S.history  = JSON.parse(h);
+    if(a) S.activeCaseId = a || null;
+    if(s) S.settings = {...S.settings, ...JSON.parse(s)};
+  } catch(e) {}
+}
 
-let fabrics  = load(K.F, []);
-let cases    = load(K.C, []);
-let hist     = load(K.H, []);
-let inbox    = load(K.I, []);
-let settings = load(K.S, {companyName:'', tantou:'', tel:'', fax:'', address:'', email:'', clientBaseUrl:'', endpointUrl:''});
+/* ── Escape ── */
+function esc(s){ return String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;'); }
 
-function genId() { return Date.now().toString(36) + Math.random().toString(36).slice(2,6); }
-
-/* ────────────────────────────────
-   2. TOAST
-──────────────────────────────── */
+/* ── Toast ── */
 function toast(msg, type='') {
-  const icons = {ok:'✓', err:'✕', '':'◦'};
-  const el = document.createElement('div');
-  el.className = 'toast ' + type;
-  el.innerHTML = '<span style="font-size:13px;flex-shrink:0">' + (icons[type]||'◦') + '</span><span>' + esc(msg) + '</span>';
+  const icons={ok:'✓',err:'✕','':'◦'};
+  const el=document.createElement('div');
+  el.className='toast '+type;
+  el.innerHTML='<span style="font-size:13px;flex-shrink:0">'+(icons[type]||'◦')+'</span><span>'+msg+'</span>';
   document.getElementById('toast-wrap').appendChild(el);
-  setTimeout(() => { el.style.transition = 'opacity .3s'; el.style.opacity = '0'; setTimeout(() => el.remove(), 300); }, 2800);
+  setTimeout(()=>{el.style.transition='opacity .3s';el.style.opacity='0';setTimeout(()=>el.remove(),300);},2800);
 }
 
-/* ────────────────────────────────
-   3. MODAL (single slot)
-──────────────────────────────── */
-function openModal(html, wide) {
-  const box = document.getElementById('modal-box');
-  box.className = 'modal' + (wide ? ' modal-wide' : '');
-  box.innerHTML = html;
-  document.getElementById('modal-bg').classList.add('on');
-}
-function closeModal() { document.getElementById('modal-bg').classList.remove('on'); }
-
-document.getElementById('modal-bg').addEventListener('click', e => {
-  if (e.target === document.getElementById('modal-bg')) closeModal();
-});
-
-/* ────────────────────────────────
-   4. ESCAPE
-──────────────────────────────── */
-function esc(s) {
-  return String(s == null ? '' : s)
-    .replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;')
-    .replace(/"/g,'&quot;').replace(/'/g,'&#39;');
-}
-
-/* ────────────────────────────────
-   5. NAVIGATION
-──────────────────────────────── */
-let current = 'dashboard';
-
-function navigate(name) {
-  current = name;
-  document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
-  document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
-  const pg = document.getElementById('page-' + name);
-  if (pg) pg.classList.add('active');
-  const ni = document.querySelector('[data-page="' + name + '"]');
-  if (ni) ni.classList.add('active');
-
-  const renders = {
-    dashboard: renderDash,
-    master: renderMst,
-    qrprint: renderQRP,
-    inbox: renderInbox,
+/* ── Navigation ── */
+function nav(page) {
+  S.page=page;
+  document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));
+  document.querySelectorAll('.nav-item').forEach(n=>n.classList.remove('active'));
+  const pEl=document.getElementById('page-'+page);
+  if(pEl) pEl.classList.add('active');
+  const nEl=document.querySelector('[data-page="'+page+'"]');
+  if(nEl) nEl.classList.add('active');
+  ({
+    dashboard: renderDash, master: renderMst, qrprint: renderQRP,
     cases: renderCases,
-    sendprint: renderSendPrint,
-    history: renderHistory,
-    settings: renderSettings,
-  };
-  (renders[name] || (() => {}))();
+    labels: renderLabels, history: renderHistory,
+    settings: renderSettings
+  }[page]||(() => {}))();
   updBadges();
 }
 
-document.querySelectorAll('.nav-item').forEach(n =>
-  n.addEventListener('click', () => navigate(n.dataset.page))
-);
-
-function updBadges() {
-  document.getElementById('bdg-m').textContent = fabrics.length;
-  document.getElementById('bdg-c').textContent = cases.length;
-  document.getElementById('bdg-h').textContent = hist.length;
-  document.getElementById('bdg-i').textContent = inbox.length;
+/* ═══ CSV / XLSX Import ═══ */
+function detectEnc(buf) {
+  const b=new Uint8Array(buf);
+  if(b[0]===0xEF&&b[1]===0xBB&&b[2]===0xBF) return 'utf-8';
+  try { new TextDecoder('utf-8',{fatal:true}).decode(buf); return 'utf-8'; }
+  catch(e) { return 'shift-jis'; }
 }
-
-/* ────────────────────────────────
-   6. CLIENT URL & QR GENERATION
-──────────────────────────────── */
-function clientUrl(f) {
-  const base = (settings.clientBaseUrl || '').replace(/\/+$/, '');
-  if (!base) return f.hinban; // fallback if URL not configured
-  const p = new URLSearchParams();
-  if (f.hinban)   p.set('id', f.hinban);
-  if (f.hinmei)   p.set('nm', f.hinmei);
-  if (f.haba)     p.set('w',  f.haba);
-  if (f.me)       p.set('g',  f.me);
-  if (f.konritsu) p.set('k',  f.konritsu);
-  if (f.ito)      p.set('t',  f.ito);
-  return base + '?' + p.toString();
+function parseCSV(txt) {
+  const lines=txt.replace(/\r\n/g,'\n').replace(/\r/g,'\n').split('\n');
+  if(lines.length<2) return [];
+  const pr=ln=>{const cells=[];let cur='',inQ=false;
+    for(let i=0;i<ln.length;i++){
+      if(ln[i]==='"'){if(inQ&&ln[i+1]==='"'){cur+='"';i++;}else inQ=!inQ;}
+     else if(ln[i]===','&&!inQ){cells.push(cur);cur='';}
+      else cur+=ln[i];
+    }cells.push(cur);return cells;};
+  const hdrs=pr(lines[0]).map(h=>h.trim().replace(/^﻿/,''));
+  const cm=mapCols(hdr else if(ln[i]===','&&!inQ){cells.push(cur);cur='';}
+      else cur+=ln[i];
+    }cells.push(cur);return cells;};
+  const hdrs=pr(lines[0]).map(h=>h.trim().replace(/^﻿/,''));
+  const cm=mapCols(hdrs);
+  const rows=[];
+  for(let i=1;i<lines.length;i++){
+    if(!lines[i].trim()) continue;
+    const cells=pr(lines[i]);
+    const row={品番:'',品名:'',生地巾:'',目付:'',混率:'',使用糸:'',備考:''};
+    Object.entries(cm).forEach(([k,idx])=>{if(idx>=0&&idx<cells.length)row[k]=cells[idx].trim();});
+    if(row.品番) rows.push(row);
+  }
+  return rows;
 }
-
-function genQRSvg(data, size=72) {
-  if (typeof qrcode === 'undefined')
-    return '<div style="width:'+size+'px;height:'+size+'px;background:var(--ink-4);display:flex;align-items:center;justify-content:center;font-size:9px;color:var(--ink-7)">QR</div>';
-  for (const t of [0,1,2,3,4,5]) {
+function mapCols(hdrs) {
+  const m={品番:-1,品名:-1,生地巾:-1,目付:-1,混率:-1,使用糸:-1,備考:-1};
+  const pat={品番:/品番|style|item.?no|article/i,品名:/品名|name|desc/i,
+    生地巾:/生地巾|幅|width|巾/i,目付:/目付|weight|g\//i,
+    混率:/混率|comp|fiber|content/i,使用糸:/使用糸|yarn|糸/i,備考:/備考|memo|note|remark/i};
+  hdrs.forEach((h,i)=>{Object.entries(pat).forEach(([k,re])=>{if(m[k]===-1&&re.test(h))m[k]=i;});});
+  if(m.品番===-1&&hdrs.length>0) m.品番=0;
+  if(m.品名===-1&&hdrs.length>1) m.品名=1;
+  return m;
+}
+async function importCSV(files) {
+  let added=0, updated=0;
+  for(const f of files) {
     try {
-      const q = qrcode(t, 'M'); q.addData(data); q.make();
-      const n = q.getModuleCount(), cs = Math.max(1, Math.floor(size / n));
-      return q.createSvgTag(cs, 0).replace('<svg', '<svg style="display:block;width:'+(cs*n)+'px;height:'+(cs*n)+'px"');
-    } catch(e) {}
+      let rows=[];
+      if(/\.xlsx?$/i.test(f.name)) {
+        rows=await importXLSX(f);
+      } else {
+        const buf=await f.arrayBuffer();
+        const txt=new TextDecoder(detectEnc(buf)).decode(buf);
+        rows=parseCSV(txt);
+      }
+      rows.forEach(row=>{
+        const idx=S.master.findIndex(m=>m.品番===row.品番);
+        if(idx>=0){S.master[idx]=row;updated++;}else{S.master.push(row);added++;}
+      });
+    } catch(e){ console.error(e); toast(f.name+': 読込エラー','err'); }
+  }
+  saveS(); toast(added+'件追加、'+updated+'件更新','ok'); renderMst(); updBadges();
+}
+async function importXLSX(file) {
+  if(typeof XLSX==='undefined'){toast('XLSXライブラリ読込中。少し待って再試行してください','err');return [];}
+  const buf=await file.arrayBuffer();
+  const wb=XLSX.read(buf,{type:'array'});
+  const ws=wb.Sheets[wb.SheetNames[0]];
+  return parseXLSXKZ(ws);
+}
+function parseXLSXKZ(ws) {
+  const raw=XLSX.utils.sheet_to_json(ws,{header:1,defval:null});
+  if(!raw||raw.length<2) return [];
+  const hdr=raw[0];
+  const pnCols=hdr.map((v,i)=>v==='品番'?i:-1).filter(i=>i!==-1);
+  if(!pnCols.length) return parseXLSXGeneric(raw);
+  const items=[]; const seen=new Set();
+  const g=(row,c)=>{const v=c<row.length?row[c]:null;return v!=null?String(v).replace(/　/g,' ').trim():'';};
+  const xW=s=>{const m=s.match(/(\d+(?:\.\d+)?)\s*W/);return m?m[1]+'W':''};
+  const xG=s=>{const m=s.match(/(\d+(?:\.\d+)?)\s*g\/m/i);return m?m[1]+'g/m':''};
+  for(const pnCol of pnCols) {
+    const kiCol=pnCol+1,ysCol=pnCol+2,mrCol=pnCol+5,b1Col=pnCol+7,b2Col=pnCol+8;
+    let cur=null;
+    for(let ri=1;ri<raw.length;ri++){
+      const row=raw[ri]; const pn=g(row,pnCol);
+      if(pn&&!seen.has(pn)){
+        if(cur){items.push(cur);seen.add(cur.品番);}
+        const b2=g(row,b2Col);
+        cur={品番:pn,品名:g(row,kiCol),生地巾:xW(b2),目付:xG(b2),
+             混率:g(row,mrCol).replace(/\s+/g,' '),使用糸:g(row,ysCol),備考:g(row,b1Col)};
+      } else if(cur) {
+        const ki=g(row,kiCol),ys=g(row,ysCol),b2=g(row,b2Col);
+        if(ki&&!/^\d+号$/.test(ki)&&!cur.品名) cur.品名=ki;
+        if(ys) cur.使用糸=(cur.使用糸?cur.使用糸+' / ':'')+ys;
+        if(b2&&!cur.生地巾){cur.生地巾=xW(b2);cur.目付=xG(b2);}
+      }
+    }
+    if(cur&&!seen.has(cur.品番)){items.push(cur);seen.add(cur.品番);}
+  }
+  return items;
+}
+function parseXLSXGeneric(raw) {
+  if(raw.length<2) return [];
+  const hdrs=raw[0].map(v=>v!=null?String(v).trim():'');
+  const cm=mapCols(hdrs); const rows=[];
+  for(let i=1;i<raw.length;i++){
+    const cells=raw[i].map(v=>v!=null?String(v).replace(/　/g,' ').trim():'');
+    const row={品番:'',品名:'',生地巾:'',目付:'',混率:'',使用糸:'',備考:''};
+    Object.entries(cm).forEach(([k,idx])=>{if(idx>=0&&idx<cells.length)row[k]=cells[idx];});
+    if(row.品番) rows.push(row);
+  }
+  return rows;
+}
+function clrImport(){
+  if(!confirm('現在のマスタデータを全削除してから取込みます。\n文字化けリセットに使用してください。続けますか？')) return;
+  S.master=[]; saveS(); updBadges(); renderMst();
+  document.getElementById('csv-in').click();
+}
+function exportMasterCSV(){
+  if(!S.master.length){toast('データがありません','err');return;}
+  const h=['品番','品名','生地巾','目付','混率','使用糸','備考'];
+  const csv=[h.join(','),...S.master.map(r=>h.map(k=>'"'+(r[k]||'').replace(/"/g,'""')+'"').join(','))].join('\n');
+  dl('﻿'+csv,'fabric-master.csv','text/csv;charset=utf-8');
+}
+function dl(t,n,type){const a=document.createElement('a');a.href=URL.createObjectURL(new Blob([t],{type}));a.download=n;a.click();}
+
+/* ═══ QR Generation ═══ */
+function genQR(data,size=72){
+  if(typeof qrcode==='undefined')
+    return '<div style="width:'+size+'px;height:'+size+'px;background:var(--ink-4);display:flex;align-items:center;justify-content:center;font-size:9px;color:var(--ink-7)">QR</div>';
+  for(const t of[0,1,2,3,4,5]){
+    try{const q=qrcode(t,'M');q.addData(data);q.make();
+      const n=q.getModuleCount(),cs=Math.max(1,Math.floor(size/n));
+      return q.createSvgTag(cs,0).replace('<svg','<svg style="display:block;width:'+(cs*n)+'px;height:'+(cs*n)+'px"');
+    }catch(e){}
   }
   return '<div style="width:'+size+'px;height:'+size+'px;background:var(--ink-4);display:flex;align-items:center;justify-content:center;font-size:8px;color:var(--ruby)">ERR</div>';
 }
 
-/* ────────────────────────────────
-   7. DASHBOARD
-──────────────────────────────── */
-function renderDash() {
-  document.getElementById('dash-body').innerHTML =
+
+function addToCase(code){
+  const item=S.master.find(m=>m.品番===code||m.品番===code.toUpperCase());
+  if(!item){toast('品番「'+code+'」はマスタに存在しません','err');return;}
+  if(!S.activeCaseId){toast('案件を選択してください','err');return;}
+  const c=S.cases.find(c=>c.id===S.activeCaseId);if(!c) return;
+  const ex=c.items.find(i=>i.品番===item.品番);
+  if(ex){ex.qty=(ex.qty||1)+1;toast(item.品番+' — 数量 '+ex.qty,'ok');}
+  else{c.items.push({品番:item.品番,qty:1,memo:''});toast(item.品番+' を追加','ok');}
+  saveS();renderSL();
+}
+
+/* ═══ Dashboard ═══ */
+function renderDash(){
+  const ac=S.cases.find(c=>c.id===S.activeCaseId);
+  const hs=S.history.length;
+  document.getElementById('dash-body').innerHTML=
     '<div class="stats-row">'
-    + '<div class="stat-card"><div class="stat-lbl">Master Items</div>'
-    + '<div class="stat-val">' + fabrics.length + '<span class="stat-unit">品番</span></div>'
-    + '<div class="stat-sub">生地マスタ登録数</div></div>'
-    + '<div class="stat-card"><div class="stat-lbl">Active Cases</div>'
-    + '<div class="stat-val">' + cases.length + '<span class="stat-unit">案件</span></div>'
-    + '<div class="stat-sub">送付案件数</div></div>'
-    + '<div class="stat-card"><div class="stat-lbl">Send History</div>'
-    + '<div class="stat-val">' + hist.length + '<span class="stat-unit">件</span></div>'
-    + '<div class="stat-sub">累計送付回数</div></div>'
-    + '</div>'
-    + '<div class="card-hd">Quick Actions</div>'
-    + '<div class="qa-grid">'
-    + _qa('&#x229E;','マスタ管理','master')
-    + _qa('&#x22A0;','QR 印刷','qrprint')
-    + _qa('&#x229F;','案件管理','cases')
-    + _qa('&#x22A1;','送付印刷','sendprint')
-    + _qa('&#x25D7;','送付履歴','history')
-    + _qa('&#x2709;','受信ボックス','inbox')
-    + '</div>';
+    +'<div class="stat-card"><div class="stat-lbl">Master Items</div>'
+    +'<div class="stat-val">'+S.master.length.toLocaleString()+'<span class="stat-unit">品番</span></div>'
+    +'<div class="stat-sub">生地マスタ登録数</div></div>'
+    +'<div class="stat-card"><div class="stat-lbl">Active Cases</div>'
+    +'<div class="stat-val">'+S.cases.length+'<span class="stat-unit">案件</span></div>'
+    +'<div class="stat-sub">進行中の送付案件</div></div>'
+    +'<div class="stat-card"><div class="stat-lbl">Send History</div>'
+    +'<div class="stat-val">'+hs+'<span class="stat-unit">件</span></div>'
+    +'<div class="stat-sub">累計送付回数</div></div>'
+    +'<div class="stat-card"><div class="stat-lbl">Current List</div>'
+    +'<div class="stat-val">'+(ac?ac.items.length:0)+'<span class="stat-unit">品番</span></div>'
+    +'<div class="stat-sub">'+(ac?ac.items.reduce((s,i)=>s+(i.qty||1),0)+'点 / '+esc(ac.name):'案件未選択')+'</div></div>'
+    +'</div>'
+    +(ac
+      ?'<div class="banner card-feat mb22"><div class="b-dot"></div>'
+      +'<div class="flex-1"><div style="font-size:14px;font-weight:500">'+esc(ac.name)+'</div>'
+      +'<div class="text-d text-sm" style="margin-top:2px">'+esc(ac.client||'顧客未設定')
+      +' &nbsp;&#183;&nbsp; '+ac.items.length+'品番 / '+ac.items.reduce((s,i)=>s+(i.qty||1),0)+'点</div></div>'
+      +'<div class="flex gap8">'
+      +'<button class="btn btn-s btn-sm" onclick="nav(\'cases\')">詳細</button>'
+      +'<button class="btn btn-p btn-sm" onclick="nav(\'labels\')">送付印刷</button>'
+      +'</div></div>'
+      :'<div class="banner warn mb22"><span style="font-size:20px;color:var(--gold);flex-shrink:0">&#9702;</span>'
+      +'<div class="flex-1"><div style="font-size:13px;font-weight:500;color:var(--gold)">アクティブ案件なし</div>'
+      +'<div class="text-d text-sm">スキャン前に案件を作成・選択してください</div></div>'
+      +'<button class="btn btn-p btn-sm" onclick="showNCM()">+ 案件作成</button></div>')
+    +'<div class="card-hd" style="margin-bottom:14px">Quick Actions</div>'
+    +'<div class="qa-grid">'
+    +'<div class="qa" onclick="document.getElementById(\'csv-in\').click();nav(\'master\')">'
+    +'<span class="qa-ic">&#x2191;</span><span class="qa-lbl">データ取込</span></div>'    +'<div class="qa" onclick="showNCM()">'
+    +'<span class="qa-ic">&#xFF0B;</span><span class="qa-lbl">新規案件</span></div>'
+    +'<div class="qa" onclick="nav(\'labels\')">'
+    +'<span class="qa-ic">&#x22A1;</span><span class="qa-lbl">送付印刷</span></div>'
+    +'<div class="qa" onclick="nav(\'history\')">'
+    +'<span class="qa-ic">&#x25D7;</span><span class="qa-lbl">送付履歴</span></div>'
+    +'</div>';
 }
 
-function _qa(ic, lbl, page) {
-  return '<div class="qa" onclick="navigate(\''+page+'\')">'
-    + '<span class="qa-ic" style="color:var(--gold)">'+ic+'</span>'
-    + '<div class="qa-lbl">'+esc(lbl)+'</div></div>';
-}
-
-/* ────────────────────────────────
-   8. MASTER TABLE
-──────────────────────────────── */
-function renderMst() {
-  const q = (document.getElementById('mst-search').value || '').toLowerCase();
-  const list = fabrics.filter(f =>
-    f.hinban.toLowerCase().includes(q) || (f.hinmei||'').toLowerCase().includes(q)
-  );
-
-  const tbody = document.getElementById('mst-tbody');
-  if (!list.length) {
-    tbody.innerHTML = '<tr><td colspan="8" style="text-align:center;color:var(--ink-7);padding:48px;letter-spacing:.06em">'
-      + (q ? '検索結果なし' : 'データなし') + '</td></tr>';
+/* ═══ Master ═══ */
+let mPg=1; const MPSZ=50;
+function renderMst(){
+  const q=(document.getElementById('mst-search')?.value||'').toLowerCase();
+  const fil=S.master.filter(m=>!q||m.品番.toLowerCase().includes(q)||m.品名.toLowerCase().includes(q));
+  const total=Math.max(1,Math.ceil(fil.length/MPSZ));
+  if(mPg>total) mPg=total;
+  const sl=fil.slice((mPg-1)*MPSZ,mPg*MPSZ);
+  const cnt=document.getElementById('mst-cnt');
+  if(cnt) cnt.textContent=fil.length.toLocaleString()+' / '+S.master.length.toLocaleString()+' 品番';
+  const tb=document.getElementById('mst-tbody'); if(!tb) return;
+  if(!sl.length){
+    tb.innerHTML='<tr><td colspan="9" style="text-align:center;padding:44px;color:var(--ink-7)">'
+      +(S.master.length?'一致なし':'CSVまたはxlsxを取込してください')+'</td></tr>';
   } else {
-    tbody.innerHTML = list.map(f =>
-      '<tr>'
-      + '<td><span class="td-mono">' + esc(f.hinban) + '</span></td>'
-      + '<td>' + esc(f.hinmei) + '</td>'
-      + '<td class="td-dim">' + esc(f.haba) + '</td>'
-      + '<td class="td-dim">' + esc(f.me) + '</td>'
-      + '<td class="td-dim">' + esc(f.konritsu) + '</td>'
-      + '<td class="td-dim">' + esc(f.ito) + '</td>'
-      + '<td class="td-dim">' + esc(f.bikou) + '</td>'
-      + '<td><div class="flex gap6">'
-      + '<button class="btn btn-s btn-xs" data-action="edit" data-id="'+esc(f.hinban)+'">編集</button>'
-      + '<button class="btn btn-d btn-xs" data-action="del" data-id="'+esc(f.hinban)+'">削除</button>'
-      + '</div></td>'
-      + '</tr>'
+    tb.innerHTML=sl.map(it=>
+      '<tr><td><input type="checkbox" class="chk" '+(S.qrSel.has(it.品番)?'checked':'')
+      +' onchange="togQR(\''+esc(it.品番)+'\',this.checked)"></td>'
+      +'<td class="td-mono">'+esc(it.品番)+'</td>'
+      +'<td>'+esc(it.品名)+'</td>'
+      +'<td class="td-dim">'+esc(it.生地巾)+'</td>'
+      +'<td class="td-dim">'+esc(it.目付)+'</td>'
+      +'<td class="td-dim">'+esc(it.混率)+'</td>'
+      +'<td class="td-dim" style="max-width:150px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;font-size:11px">'+esc(it.使用糸||'')+'</td>'
+      +'<td style="max-width:110px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;font-size:11px;color:var(--ink-7)">'+esc(it.備考||'')+'</td>'s="td-dim">'+esc(it.目付)+'</td>'
+      +'<td class="td-dim">'+esc(it.混率)+'</td>'
+      +'<td class="td-dim" style="max-width:150px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;font-size:11px">'+esc(it.使用糸||'')+'</td>'
+      +'<td style="max-width:110px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;font-size:11px;color:var(--ink-7)">'+esc(it.備考||'')+'</td>'
+      +'<td style="white-space:nowrap">' +'<button class="btn btn-g btn-xs" onclick="addToCase(\''+esc(it.品番)+'\')" title="案件に追加">&#xFF0B;</button> ' +'<button class="btn btn-g btn-xs" onclick="editMst(\''+esc(it.品番)+'\')">&#x270E;</button> ' +'<button class="btn btn-d btn-xs" onclick="delMst(\''+esc(it.品番)+'\')" style="margin-left:1px">&#x2715;</button>'+'</td></tr>'
     ).join('');
   }
-  document.getElementById('mst-cnt').textContent = list.length + ' / ' + fabrics.length + ' 件';
-}
-
-document.getElementById('mst-tbody').addEventListener('click', e => {
-  const btn = e.target.closest('[data-action]'); if (!btn) return;
-  if (btn.dataset.action === 'edit') openFabricModal(btn.dataset.id);
-  if (btn.dataset.action === 'del')  deleteFabric(btn.dataset.id);
-});
-
-/* ────────────────────────────────
-   9. FABRIC MODAL
-──────────────────────────────── */
-function openFabricModal(hinban) {
-  const f = hinban ? fabrics.find(x => x.hinban === hinban) : null;
-  const v = k => f ? esc(f[k]||'') : '';
-  openModal(
-    '<div class="modal-ttl">' + (f ? '生地編集' : '生地登録') + '</div>'
-    + '<div class="g2 mb16">'
-    + _ir('品番', 'f-hinban', v('hinban'), '例: AB-001', !f)
-    + _ir('品名', 'f-hinmei', v('hinmei'), '例: ストレッチダブル')
-    + '</div>'
-    + '<div class="g2 mb16">'
-    + _ir('生地巾', 'f-haba', v('haba'), '例: 83W')
-    + _ir('目付', 'f-me', v('me'), '例: 524g/m')
-    + '</div>'
-    + '<div class="g2 mb16">'
-    + _ir('混率', 'f-konritsu', v('konritsu'), '例: cotton43 Tencel57')
-    + _ir('使用糸', 'f-ito', v('ito'), '例: 綿糸 / ポリ糸')
-    + '</div>'
-    + '<div class="inp-row">'
-    + '<label class="inp-lbl">備考</label>'
-    + '<textarea class="inp" id="f-bikou" rows="2" placeholder="自由記入">' + v('bikou') + '</textarea>'
-    + '</div>'
-    + '<div class="modal-acts">'
-    + '<button class="btn btn-s btn-sm" onclick="closeModal()">キャンセル</button>'
-    + '<button class="btn btn-p btn-sm" onclick="saveFabric(' + (f ? "'"+esc(f.hinban)+"'" : 'null') + ')">保存</button>'
-    + '</div>'
-  );
-  if (!f) setTimeout(() => document.getElementById('f-hinban')?.focus(), 50);
-}
-
-function _ir(lbl, id, val, ph, required) {
-  return '<div class="inp-row" style="margin-bottom:0">'
-    + '<label class="inp-lbl">' + lbl + (required ? ' *' : '') + '</label>'
-    + '<input type="text" class="inp" id="' + id + '" value="' + val + '" placeholder="' + esc(ph) + '">'
-    + '</div>';
-}
-
-function saveFabric(originalHinban) {
-  const hinban = (document.getElementById('f-hinban').value || '').trim();
-  if (!hinban) { toast('品番を入力してください', 'err'); return; }
-  const data = {
-    hinban,
-    hinmei:   (document.getElementById('f-hinmei').value || '').trim(),
-    haba:     (document.getElementById('f-haba').value || '').trim(),
-    me:       (document.getElementById('f-me').value || '').trim(),
-    konritsu: (document.getElementById('f-konritsu').value || '').trim(),
-    ito:      (document.getElementById('f-ito').value || '').trim(),
-    bikou:    (document.getElementById('f-bikou').value || '').trim(),
-  };
-  if (originalHinban) {
-    const i = fabrics.findIndex(f => f.hinban === originalHinban);
-    if (i >= 0) fabrics[i] = data;
-    toast('更新しました', 'ok');
-  } else {
-    if (fabrics.some(f => f.hinban === hinban)) { toast('品番が重複しています', 'err'); return; }
-    fabrics.push(data);
-    toast('登録しました', 'ok');
+  const pag=document.getElementById('mst-pag');
+  if(pag){
+    if(total<=1){pag.innerHTML='';return;}
+    let h='';
+    if(mPg>1) h+='<button class="btn btn-g btn-xs" onclick="goMP('+(mPg-1)+')">&#x2190;</button>';
+    for(let p=Math.max(1,mPg-2);p<=Math.min(total,mPg+2);p++)
+      h+='<button class="btn '+(p===mPg?'btn-p':'btn-g')+' btn-xs" onclick="goMP('+p+')">'+p+'</button>';
+    if(mPg<total) h+='<button class="btn btn-g btn-xs" onclick="goMP('+(mPg+1)+')">&#x2192;</button>';
+    h+='<span class="text-xs text-d">'+mPg+'/'+total+'ページ</span>';
+    pag.innerHTML=h;
   }
-  save(K.F, fabrics);
-  closeModal();
-  renderMst();
-  updBadges();
 }
-
-function deleteFabric(hinban) {
-  if (!confirm('品番「' + hinban + '」を削除しますか？')) return;
-  fabrics = fabrics.filter(f => f.hinban !== hinban);
-  save(K.F, fabrics);
-  renderMst();
-  updBadges();
-  toast('削除しました');
+function goMP(p){mPg=p;renderMst();}
+function editMst(code){
+  const it=S.master.find(m=>m.品番===code);if(!it)return;
+  showModal(
+    '<div class="modal-ttl">&#x270E; マスタ編集</div>'
+    +'<div style="display:grid;gap:10px">'
+    +['品番','品名','生地巾','目付','混率','使用糸','備考'].map(k=>
+      '<div><div style="font-size:11px;color:var(--sand-4);margin-bottom:3px">'+k+'</div>'
+      +'<input class="inp" id="me_'+k+'" value="'+esc(it[k]||'')+'"'
+      +(k==='品番'?' readonly style="opacity:.55;cursor:not-allowed"':'')+'></div>'
+    ).join('')
+    +'</div>'
+    +'<div class="modal-acts">'
+    +'<button class="btn btn-g" onclick="closeModal()">キャンセル</button>'
+    +'<button class="btn btn-p" onclick="saveMstEdit(''+esc(code)+'')" style="min-width:70px">保存</button>'
+    +'</div>'
+  );
 }
-
-/* ────────────────────────────────
-   10. IMPORT / EXPORT
-──────────────────────────────── */
-function importFiles(input, clear) {
-  const files = Array.from(input.files); if (!files.length) return; input.value = '';
-  // If clearing, wipe now and treat all files as add-mode
-  if (clear) { fabrics = []; save(K.F, fabrics); }
-  files.forEach(file => {
-    if (/\.xlsx?$|\.xlsm$/i.test(file.name)) {
-      importXLSX(file, false);
-    } else {
-      importCSVFile(file, false);
-    }
+function saveMstEdit(code){
+  const idx=S.master.findIndex(m=>m.品番===code);if(idx<0)return;
+  ['品名','生地巾','目付','混率','使用糸','備考'].forEach(k=>{
+    const el=document.getElementById('me_'+k);
+    if(el)S.master[idx][k]=el.value.trim();
   });
-  if (clear) toast('クリア取込: ' + files.length + ' ファイル処理中', '');
+  saveS();closeModal();renderMst();toast('保存しました','ok');
 }
-
-function importCSVFile(file, clear) {
-  const reader = new FileReader();
-  reader.onload = e => {
-    try {
-      const lines = e.target.result.split(/\r?\n/).filter(l => l.trim());
-      if (lines.length < 2) { toast('データがありません', 'err'); return; }
-      const header = lines[0].split(',').map(h => h.trim().replace(/^"|"$/g, '').replace(/^﻿/, ''));
-      const alias = {
-        hinban:   ['品番','hinban'], hinmei: ['品名','hinmei'],
-        haba: ['生地巾','haba'], me: ['目付','me'],
-        konritsu: ['混率','konritsu'], ito: ['使用糸','ito'], bikou: ['備考','bikou']
-      };
-      const col = {};
-      Object.entries(alias).forEach(([k, alts]) => {
-        for (const a of alts) { const i = header.findIndex(h => h === a); if (i >= 0) { col[k] = i; break; } }
-      });
-      const rows = [];
-      for (let i = 1; i < lines.length; i++) {
-        const c = _parseCSVLine(lines[i]);
-        const hinban = (c[col.hinban] || '').trim(); if (!hinban) continue;
-        rows.push({
-          hinban, hinmei: (c[col.hinmei]||'').trim(), haba: (c[col.haba]||'').trim(),
-          me: (c[col.me]||'').trim(), konritsu: (c[col.konritsu]||'').trim(),
-          ito: (c[col.ito]||'').trim(), bikou: (c[col.bikou]||'').trim(),
-        });
-      }
-      _applyImport(rows, clear);
-    } catch(e) { toast('CSV読込エラー: '+e.message, 'err'); }
-  };
-  reader.readAsText(file, 'UTF-8');
+function delMst(code){
+  if(!confirm('「'+code+'」をマスタから削除しますか？'))return;
+  S.master=S.master.filter(m=>m.品番!==code);
+  S.qrSel.delete(code);
+  saveS();updBadges();renderMst();toast(code+' を削除しました','ok');
 }
-
-function _parseCSVLine(line) {
-  const res = []; let cur = '', inQ = false;
-  for (let i = 0; i < line.length; i++) {
-    const c = line[i];
-    if (inQ) { if (c==='"'&&line[i+1]==='"'){cur+='"';i++;} else if(c==='"')inQ=false; else cur+=c; }
-    else { if(c==='"')inQ=true; else if(c===','){res.push(cur);cur='';} else cur+=c; }
-  }
-  res.push(cur); return res;
-}
-
-/* XLSX 仕様書準拠: シート「印刷」のみ、A1:F8, セルマッピング通り */
-function importXLSX(file, clear) {
-  const reader = new FileReader();
-  reader.onload = e => {
-    try {
-      const wb = XLSX.read(e.target.result, {type:'binary'});
-      const sn = wb.SheetNames.find(n => n === '印刷');
-      if (!sn) { toast('シート名「印刷」が見つかりません', 'err'); return; }
-      const ws = wb.Sheets[sn];
-      const rows = XLSX.utils.sheet_to_json(ws, {header:1, defval:null, range:'A1:F8'});
-      const clean = v => (v===null||v===undefined||v===0||v==='0') ? '' : String(v).trim();
-
-      const hinban = clean(rows[2]?.[2]); // C3
-      if (!hinban) { toast('品番(C3)が空のためスキップ', 'err'); return; }
-      const hinmei = clean(rows[3]?.[2]); // C4
-      const ito1 = clean(rows[4]?.[2]), ito2 = clean(rows[4]?.[4]);
-      const ito = [ito1,ito2].filter(Boolean).join(' / ');
-      let haba = clean(rows[5]?.[2]);
-      if (haba && !/[Ww]/.test(haba)) haba += 'W';
-      let me = '';
-      const meRaw = clean(rows[5]?.[4]);
-      if (meRaw) { const n = parseFloat(meRaw); if (!isNaN(n)&&n!==0) me = n+'g/m'; }
-      const k1 = clean(rows[6]?.[2]), k2 = clean(rows[6]?.[4]);
-      const konritsu = [k1,k2].filter(Boolean).join(' ');
-
-      _applyImport([{hinban,hinmei,haba,me,konritsu,ito,bikou:''}], clear);
-    } catch(e) { toast('XLSX読込エラー: '+e.message, 'err'); }
-  };
-  reader.readAsBinaryString(file);
-}
-
-function _applyImport(rows, clear) {
-  if (clear) {
-    fabrics = rows;
-    toast('クリア取込完了: ' + rows.length + ' 件', 'ok');
-  } else {
-    let added = 0, updated = 0;
-    rows.forEach(d => {
-      const i = fabrics.findIndex(f => f.hinban === d.hinban);
-      if (i >= 0) { fabrics[i] = d; updated++; } else { fabrics.push(d); added++; }
-    });
-    toast(added + '件追加、' + updated + '件更新', 'ok');
-  }
-  save(K.F, fabrics);
-  renderMst();
-  updBadges();
-}
-
-function exportCSV() {
-  if (!fabrics.length) { toast('データがありません', 'err'); return; }
-  const hdr = '品番,品名,生地巾,目付,混率,使用糸,備考';
-  const rows = fabrics.map(f =>
-    [f.hinban,f.hinmei,f.haba,f.me,f.konritsu,f.ito,f.bikou]
-      .map(v => '"' + (v||'').replace(/"/g,'""') + '"').join(',')
+function addMstRow(){
+  showModal(
+    '<div class="modal-ttl">&#xFF0B; 新規品番追加</div>'
+    +'<div style="display:grid;gap:10px">'
+    +['品番','品名','生地巾','目付','混率','使用糸','備考'].map(k=>
+      '<div><div style="font-size:11px;color:var(--sand-4);margin-bottom:3px">'
+      +k+(k==='品番'?' <span style="color:var(--ruby)">*</span>':'')
+      +'</div><input class="inp" id="ma_'+k+'" placeholder="'+k+'..."></div>'
+    ).join('')
+    +'</div>'
+    +'<div class="modal-acts">'
+    +'<button class="btn btn-g" onclick="closeModal()">キャンセル</button>'
+    +'<button class="btn btn-p" onclick="saveMstAdd()" style="min-width:70px">追加</button>'
+    +'</div>'
   );
-  const blob = new Blob(['﻿'+hdr+'\n'+rows.join('\n')], {type:'text/csv'});
-  const a = document.createElement('a'); a.href = URL.createObjectURL(blob);
-  a.download = 'fabric_master.csv'; a.click();
-  toast('CSV出力しました', 'ok');
 }
+function saveMstAdd(){
+  const code=(document.getElementById('ma_品番')?.value||'').trim().toUpperCase();
+  if(!code){toast('品番は必須です','err');return;}
+  if(S.master.find(m=>m.品番===code)){toast('「'+code+'」は既に存在します','err');return;}
+  const row={};
+  ['品番','品名','生地巾','目付','混率','使用糸','備考'].forEach(k=>{
+    const el=document.getElementById('ma_'+k);
+    row[k]=el?(k==='品番'?el.value.trim().toUpperCase():el.value.trim()):'';
+  });
+  S.master.unshift(row);
+  saveS();updBadges();closeModal();mPg=1;renderMst();
+  toast(code+' を追加しました','ok');
+}
+function togSelAll(){
+  const ck=document.getElementById('chk-all')?.checked;
+  const q=(document.getElementById('mst-search')?.value||'').toLowerCase();
+  S.master.filter(m=>!q||m.品番.toLowerCase().includes(q)||m.品名.toLowerCase().includes(q))
+    .slice((mPg-1)*MPSZ,mPg*MPSZ)
+    .forEach(it=>{ck?S.qrSel.add(it.品番):S.qrSel.delete(it.品番);});
+  renderMst(); updQC();
+}
+function togQR(code,ck){ck?S.qrSel.add(code):S.qrSel.delete(code);updQC();}
+function updQC(){const el=document.getElementById('qr-cnt');if(el)el.textContent=S.qrSel.size+' 件選択';}
 
-/* ────────────────────────────────
-   11. QR PRINT
-──────────────────────────────── */
-const selectedQR = new Set();
-
-function renderQRP() {
-  const q = (document.getElementById('qr-search').value || '').toLowerCase();
-  const list = fabrics.filter(f =>
-    f.hinban.toLowerCase().includes(q) || (f.hinmei||'').toLowerCase().includes(q)
-  );
-  const wrap = document.getElementById('qr-grid-wrap');
-  if (!list.length) {
-    wrap.innerHTML = '<div class="empty"><div class="empty-ic">&#x22A0;</div>'
-      + '<div class="empty-txt">生地データがありません</div></div>';
-  } else {
-    wrap.innerHTML = '<div class="qr-grid-p">'
-      + list.map(f => {
-        const sel = selectedQR.has(f.hinban);
-        return '<div class="qr-cell ' + (sel ? 'sel' : '') + '" data-hinban="' + esc(f.hinban) + '">'
-          + genQRSvg(clientUrl(f), 60)
-          + '<div class="qr-code">' + esc(f.hinban) + '</div>'
-          + '<div class="qr-name">' + esc(f.hinmei||'') + '</div>'
-          + '</div>';
+/* ═══ QR Print ═══ */
+function renderQRP(){
+  const body=document.getElementById('qrprint-body'); if(!body) return;
+  updQC();
+  if(!S.qrSel.size){
+    body.innerHTML='<div class="card mb16"><div class="card-hd">使い方</div>'
+      +'<p class="text-d text-sm mb16" style="line-height:1.8">マスタ管理ページで品番にチェックを入れると、QRコードのプレビューと印刷ができます。</p>'
+      +'<button class="btn btn-s btn-sm" onclick="nav(\'master\')">&#x2190; マスタ管理へ</button></div>'
+      +'<div class="empty"><div class="empty-ic">&#x22A0;</div><div class="empty-txt">品番を選択するとQRプレビューが表示されます</div></div>';
+    return;
+  }
+  const items=[...S.qrSel].map(c=>S.master.find(m=>m.品番===c)).filter(Boolean);
+  const pages=[];for(let i=0;i<items.length;i+=25)pages.push(items.slice(i,i+25));
+  body.innerHTML='<div class="flex ic gap12 mb16 no-print"><span class="text-sm text-d">'
+    +items.length+' 品番 &nbsp;&#183;&nbsp; '+pages.length+' ページ（A4 / 5×5）</span></div>'
+    +pages.map((pg,pi)=>
+      '<div class="card mb16"><div class="card-hd">Page '+(pi+1)+'</div>'
+      +'<div class="qr-grid">'
+      +pg.map(it=>{
+        const qd=S.settings.qrUrl?S.settings.qrUrl.replace(/\/$/,'')+'/'+it.品番:it.品番;
+        return '<div class="qr-cell">'+genQR(qd,70)
+          +'<div class="qr-code">'+esc(it.品番)+'</div>'
+          +'<div class="qr-name">'+esc((it.品名||'').substring(0,14))+'</div></div>';
       }).join('')
-      + '</div>';
-  }
-  document.getElementById('qr-sel-cnt').textContent = selectedQR.size ? selectedQR.size + ' 件選択中' : '';
-  _updateQRPreview();
+      +Array(25-pg.length).fill('<div class="qr-cell" style="opacity:.05">&#x2014;</div>').join('')
+      +'</div></div>'
+    ).join('');
+}
+function clrQR(){S.qrSel.clear();updQC();renderQRP();if(S.page==='master')renderMst();}
+function printQR(){
+  if(!S.qrSel.size){toast('品番を選択してください','err');return;}
+  const items=[...S.qrSel].map(c=>S.master.find(m=>m.品番===c)).filter(Boolean);
+  const pages=[];for(let i=0;i<items.length;i+=25)pages.push(items.slice(i,i+25));
+  const html=pages.map(pg=>
+    '<div style="page-break-after:always"><table style="width:190mm;margin:5mm auto;border-collapse:collapse;table-layout:fixed"><tbody>'
+    +Array.from({length:5},(_,r)=>'<tr>'+Array.from({length:5},(_,c)=>{
+      const it=pg[r*5+c];
+      if(!it) return '<td style="width:38mm;height:38mm;border:.5pt solid #ccc"></td>';
+      const qd=S.settings.qrUrl?S.settings.qrUrl.replace(/\/$/,'')+'/'+it.品番:it.品番;
+      return '<td style="width:38mm;height:38mm;border:.5pt solid #ccc;text-align:center;vertical-align:middle;padding:3mm">'
+        +genQR(qd,56)+'<div style="font-size:7pt;margin-top:2mm;font-family:monospace">'+esc(it.品番)+'</div>'
+        +'<div style="font-size:6pt;color:#666">'+esc((it.品名||'').substring(0,16))+'</div></td>';
+    }).join('')+'</tr>').join('')
+    +'</tbody></table></div>'
+  ).join('');
+  opPrint(html);
 }
 
-document.getElementById('qr-grid-wrap').addEventListener('click', e => {
-  const cell = e.target.closest('.qr-cell'); if (!cell) return;
-  const id = cell.dataset.hinban;
-  selectedQR.has(id) ? selectedQR.delete(id) : selectedQR.add(id);
-  renderQRP();
-});
-
-function selectAllQR(sel) {
-  fabrics.forEach(f => sel ? selectedQR.add(f.hinban) : selectedQR.delete(f.hinban));
-  renderQRP();
-}
-
-function _updateQRPreview() {
-  const area = document.getElementById('qr-preview-area');
-  const wrap = document.getElementById('qr-preview-labels');
-  if (!selectedQR.size) { area.style.display = 'none'; return; }
-  area.style.display = 'block';
-  wrap.innerHTML = '';
-  selectedQR.forEach(hinban => {
-    const f = fabrics.find(x => x.hinban === hinban); if (!f) return;
-    const div = document.createElement('div');
-    div.innerHTML = _buildLabel(f);
-    wrap.appendChild(div);
-  });
-}
-
-function _buildLabel(f) {
-  return '<div style="background:#fff;color:#000;padding:10px;display:inline-flex;gap:10px;align-items:flex-start;border:1px solid #aaa;font-family:Arial,sans-serif">'
-    + '<div style="flex-shrink:0">' + genQRSvg(clientUrl(f), 64).replace(/fill="#[0-9a-f]+"/gi, 'fill="#000"').replace(/fill="white"/gi, 'fill="#fff"') + '</div>'
-    + '<div style="font-size:9px;line-height:1.8;min-width:90px;color:#111">'
-    + '<div style="font-size:12px;font-weight:700;color:#000;margin-bottom:2px;letter-spacing:.03em">' + esc(f.hinban) + '</div>'
-    + (f.hinmei    ? '<div>'+esc(f.hinmei)+'</div>' : '')
-    + (f.haba      ? '<div style="color:#555">巾: '+esc(f.haba)+'</div>' : '')
-    + (f.me        ? '<div style="color:#555">目付: '+esc(f.me)+'</div>' : '')
-    + (f.konritsu  ? '<div style="color:#555">'+esc(f.konritsu)+'</div>' : '')
-    + (f.ito       ? '<div style="color:#555">糸: '+esc(f.ito)+'</div>' : '')
-    + '</div></div>';
-}
-
-function printQRLabels() {
-  if (!selectedQR.size) { toast('ラベルを選択してください', 'err'); return; }
-  const pa = document.getElementById('print-area');
-  pa.innerHTML = '<div style="display:flex;flex-wrap:wrap;gap:6mm">'
-    + [...selectedQR].map(h => { const f = fabrics.find(x => x.hinban === h); return f ? _buildLabel(f) : ''; }).join('')
-    + '</div>';
-  setTimeout(() => window.print(), 280);
-}
-
-/* ────────────────────────────────
-   12. INBOX (受信ボックス)
-──────────────────────────────── */
-function renderInbox() {
-  const el = document.getElementById('inbox-body');
-  if (!inbox.length) {
-    el.innerHTML = '<div class="banner warn" style="margin-bottom:22px">'
-      + '<span style="font-size:18px">&#x2709;</span>'
-      + '<div><div style="font-size:12.5px;font-weight:500;color:var(--gold)">受信ボックスは空です</div>'
-      + '<div class="text-xs text-d" style="margin-top:3px">「受信取得」ボタンを押してサーバーから取得してください。設定でエンドポイントURLを設定してください。</div>'
-      + '</div></div>';
+/* ═══ Cases ═══ */
+function renderCases(){
+  const body=document.getElementById('cases-body'); if(!body) return;
+  if(!S.cases.length){
+    body.innerHTML='<div class="empty"><div class="empty-ic">&#x229F;</div>'
+      +'<div class="empty-txt">案件がありません</div>'
+      +'<div class="empty-sub">新規案件を作成してスキャンを開始してください</div>'
+      +'<button class="btn btn-p btn-sm" style="margin-top:18px" onclick="showNCM()">+ 新規案件作成</button></div>';
     return;
   }
-  const sorted = [...inbox].sort((a,b) => new Date(b.receivedAt||0) - new Date(a.receivedAt||0));
-  el.innerHTML = sorted.map(m => {
-    const date = m.receivedAt ? new Date(m.receivedAt).toLocaleString('ja-JP') : '';
-    // Support both new multi-item format {items:[...]} and old single-item format {hinban,...}
-    const fabItems = (m.items && m.items.length)
-      ? m.items
-      : (m.hinban ? [{hinban:m.hinban, hinmei:m.hinmei||'', qty:m.qty||1}] : []);
-    const itemsHtml = fabItems.map(it =>
-      '<span style="display:inline-flex;align-items:center;gap:5px;margin-right:10px">'
-      + '<span class="td-mono">'+esc(it.hinban)+'</span>'
-      + (it.hinmei ? '<span class="text-sm text-d">'+esc(it.hinmei)+'</span>' : '')
-      + '<span class="text-xs text-d">×'+esc(String(it.qty||1))+'部</span>'
-      + '</span>'
-    ).join('');
-    return '<div class="inbox-card" data-iid="' + esc(m.id) + '">'
-      + '<div class="flex ic jb gap12">'
-      + '<div class="flex-1">'
-      + '<div style="display:flex;flex-wrap:wrap;align-items:center;gap:4px;margin-bottom:8px">'
-      + itemsHtml
-      + '</div>'
-      + '<div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(140px,1fr));gap:6px 16px;margin-bottom:8px">'
-      + (m.name    ? _di2('氏名',m.name) : '')
-      + (m.company ? _di2('会社',m.company) : '')
-      + (m.mobile  ? _di2('Mobile',m.mobile) : '')
-      + (m.mail    ? _di2('Mail',m.mail) : '')
-      + (m.memo    ? _di2('メモ',m.memo) : '')
-      + '</div>'
-      + '<div class="text-xs text-d">' + date + '</div>'
-      + '</div>'
-      + '<div class="flex gap6">'
-      + '<button class="btn btn-d btn-xs" data-action="inbox-del" data-id="'+esc(m.id)+'">削除</button>'
-      + '</div></div></div>';
-  }).join('');
+  body.innerHTML='<div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:14px">'
+    +S.cases.map(c=>{
+      const tq=c.items.reduce((s,i)=>s+(i.qty||1),0);
+      return '<div class="cc'+(c.id===S.activeCaseId?' ac':'')+'"><div class="flex ic jb mb12">'
+        +'<div><div class="cc-name">'+esc(c.name)+'</div><div class="cc-client">'+esc(c.client||'&#8212;')+'</div></div>'
+        +(c.id===S.activeCaseId?'<span class="tag tag-g">ACTIVE</span>':'')
+        +'</div><div class="cc-meta"><span>'+c.items.length+' 品番</span><span>'+tq+' 点</span>'
+        +'<span>'+(c.createdAt?new Date(c.createdAt).toLocaleDateString('ja-JP'):'')+'</span></div>'
+        +'<div class="divider"></div>'
+        +'<div class="flex gap8" style="flex-wrap:wrap">'
+        +(c.id!==S.activeCaseId?'<button class="btn btn-s btn-sm" onclick="setAC(\''+c.id+'\')">アクティブ設定</button>':'')
+        +'<button class="btn btn-g btn-sm" onclick="showCD(\''+c.id+'\')">詳細・編集</button>'
+        +'<button class="btn btn-p btn-sm" onclick="setAC(\''+c.id+'\');nav(\'labels\')">&#x22A1; 送付印刷</button>'
+        +'<button class="btn btn-d btn-sm" style="margin-left:auto" onclick="delCase(\''+c.id+'\')">削除</button>'
+        +'</div></div>';
+    }).join('')+'</div>';
+}
+function setAC(id){S.activeCaseId=id;saveS();renderCases();updBadges();toast('アクティブ案件を設定しました','ok');}
+function showCD(id){
+  const c=S.cases.find(c=>c.id===id); if(!c) return;
+  const tq=c.items.reduce((s,i)=>s+(i.qty||1),0);
+  const rows=c.items.map(it=>{
+    const m=S.master.find(m=>m.品番===it.品番)||{};
+    return '<div class="sl-row"><div><div class="td-mono" style="font-size:12px">'+esc(it.品番)+'</div>'
+      +'<div class="text-xs text-d">'+esc(m.品名||'')+'</div></div>'
+      +'<input type="number" class="inp" value="'+(it.qty||1)+'" min="1" style="padding:4px 8px;font-size:12px" onchange="updQ(\''+id+'\',\''+esc(it.品番)+'\',this.value)">'
+      +'<input type="text" class="inp" value="'+esc(it.memo||'')+'" placeholder="メモ" style="padding:4px 8px;font-size:11px" onchange="updM(\''+id+'\',\''+esc(it.品番)+'\',this.value)">'
+      +'<button class="btn btn-d btn-xs" onclick="rmI(\''+id+'\',\''+esc(it.品番)+'\')">&#x2715;</button></div>';
+  }).join('')||'<div class="empty" style="padding:24px 0"><div class="empty-txt">リストが空です</div></div>';
+  showModal('<div class="modal-ttl">'+esc(c.name)+'</div>'
+    +'<div class="text-d text-xs mb16">'+esc(c.client||'')+(c.client?' &nbsp;&#183;&nbsp; ':'')+c.items.length+'品番 / '+tq+'点</div>'
+    +'<div style="max-height:340px;overflow-y:auto">'+rows+'</div>'
+    +'<div class="divider"></div>'
+    +'<div class="flex gap8" style="flex-wrap:wrap">'
+    +'<button class="btn btn-g btn-sm" onclick="cpTxt(\''+id+'\')">テキストコピー</button>'
+    +'<button class="btn btn-g btn-sm" onclick="expCase(\''+id+'\')">&#x2193; CSV</button>'
+    +'<button class="btn btn-p btn-sm" onclick="setAC(\''+id+'\');nav(\'labels\');closeModal()">&#x22A1; 送付印刷</button>'
+    +'<button class="btn btn-g btn-sm" style="margin-left:auto" onclick="closeModal()">閉じる</button>'
+    +'</div>');
+}
+function updQ(cid,code,v){const c=S.cases.find(c=>c.id===cid);if(!c)return;const it=c.items.find(i=>i.品番===code);if(it){it.qty=Math.max(1,parseInt(v)||1);saveS();}}
+function updM(cid,code,v){const c=S.cases.find(c=>c.id===cid);if(!c)return;const it=c.items.find(i=>i.品番===code);if(it){it.memo=v;saveS();}}
+function rmI(cid,code){const c=S.cases.find(c=>c.id===cid);if(!c)return;c.items=c.items.filter(i=>i.品番!==code);saveS();showCD(cid);}
+function cpTxt(id){
+  const c=S.cases.find(c=>c.id===id); if(!c) return;
+  const lines=['【'+c.name+'】'+(c.client?' — '+c.client:''),''];
+  c.items.forEach(it=>{const m=S.master.find(m=>m.品番===it.品番)||{};lines.push(it.品番+'  '+(m.品名||'')+'  ×'+(it.qty||1)+(it.memo?'  ('+it.memo+')':''));});
+  lines.push('','合計 '+c.items.length+'品番 / '+c.items.reduce((s,i)=>s+(i.qty||1),0)+'点');
+  navigator.clipboard.writeText(lines.join('\n')).then(()=>toast('コピーしました','ok'));
+}
+function expCase(id){
+  const c=S.cases.find(c=>c.id===id); if(!c) return;
+  const h=['品番','品名','生地巾','目付','混率','数量','メモ'];
+  const rows=c.items.map(it=>{const m=S.master.find(m=>m.品番===it.品番)||{};return[it.品番,m.品名||'',m.生地巾||'',m.目付||'',m.混率||'',it.qty||1,it.memo||''];});
+  const csv=[h.join(','),...rows.map(r=>r.map(v=>'"'+String(v).replace(/"/g,'""')+'"').join(','))].join('\n');
+  dl('﻿'+csv,c.name+'_送付リスト.csv','text/csv;charset=utf-8');
+}
+function delCase(id){
+  if(!confirm('この案件を削除しますか？')) return;
+  S.cases=S.cases.filter(c=>c.id!==id);
+  if(S.activeCaseId===id) S.activeCaseId=S.cases[0]?.id||null;
+  saveS();renderCases();updBadges();toast('削除しました');
 }
 
-function _di2(lbl, val) {
-  return '<div><span class="text-xs text-d" style="letter-spacing:.06em">'+esc(lbl)+':&nbsp;</span>'
-    + '<span style="font-size:12px">'+esc(val)+'</span></div>';
-}
-
-document.addEventListener('click', e => {
-  const btn = e.target.closest('[data-action^="inbox-"]'); if (!btn) return;
-  const id = btn.dataset.id;
-  if (btn.dataset.action === 'inbox-del') {
-    inbox = inbox.filter(x => x.id !== id);
-    save(K.I, inbox); renderInbox(); updBadges(); toast('削除しました');
+/* ═══ Send & Print ═══ */
+function renderLabels(){
+  const sel=document.getElementById('lbl-sel');
+  if(sel){
+    const cur=sel.value||S.activeCaseId;
+    sel.innerHTML='<option value="">&#8212; 案件を選択 &#8212;</option>'
+      +S.cases.map(c=>'<option value="'+c.id+'"'+(c.id===cur?' selected':'')+'>'+esc(c.name)+'</option>').join('');
   }
-});
-
-async function fetchInbox() {
-  const ep = settings.endpointUrl;
-  if (!ep) { toast('設定でエンドポイントURLを入力してください', 'err'); navigate('settings'); return; }
-  try {
-    const r = await fetch(ep + (ep.includes('?') ? '&' : '?') + 'action=list&t=' + Date.now());
-    if (!r.ok) throw new Error('HTTP ' + r.status);
-    const data = await r.json();
-    if (!Array.isArray(data)) throw new Error('レスポンス形式エラー');
-    let added = 0;
-    const newlyAdded = [];
-    data.forEach(item => {
-      if (item.id && !inbox.find(x => x.id === item.id)) {
-        inbox.push({...item});
-        newlyAdded.push(item);
-        added++;
+  const body=document.getElementById('labels-body'); if(!body) return;
+  const today=new Date().toISOString().slice(0,10);
+  body.innerHTML=
+    '<div style="display:grid;grid-template-columns:1fr 300px;gap:20px;align-items:start">'
+    +'<div id="lbl-preview"></div>'
+    +'<div class="card" style="position:sticky;top:0">'
+    +'<div class="card-hd">送付情報</div>'
+    +'<div class="inp-row"><label class="inp-lbl">送り先 <span style="color:var(--ruby)">*</span></label>'
+    +'<input type="text" class="inp" id="lbl-to" placeholder="例：ABC商事"></div>'
+    +'<div class="inp-row"><label class="inp-lbl">担当者</label>'
+    +'<input type="text" class="inp" id="lbl-person" placeholder="例：田中様"></div>'
+    +'<div class="inp-row"><label class="inp-lbl">送付日</label>'
+    +'<input type="date" class="inp" id="lbl-date" value="'+today+'"></div>'
+    +'<div class="inp-row"><label class="inp-lbl">備考</label>'
+    +'<input type="text" class="inp" id="lbl-note" placeholder="例：春夏展示会サンプル"></div>'
+    +'<button class="btn btn-p" style="width:100%" onclick="printAndSave()">'
+    +'&#x22A1; &nbsp;印刷して履歴に保存</button>'
+    +'</div></div>';
+  renderLP();
+}
+function renderLP(){
+  const area=document.getElementById('lbl-preview'); if(!area) return;
+  const cid=document.getElementById('lbl-sel')?.value;
+  const c=cid?S.cases.find(c=>c.id===cid):null;
+  if(!c||!c.items.length){
+    area.innerHTML='<div class="empty"><div class="empty-ic">&#x22A1;</div>'
+      +'<div class="empty-txt">案件を選択するとプレビューが表示されます</div></div>';
+    return;
+  }
+  const items=buildLblItems(c);
+  const pages=[];for(let i=0;i<items.length;i+=6)pages.push(items.slice(i,i+6));
+  const SEP='－'.repeat(32);
+  area.innerHTML='<div class="flex ic gap12 mb16"><span class="text-sm text-d">'
+   +items.length+'枚 / '+pages.length+'ページ（A4 / 6枚）</span></div>'
+    +pages.map((pg,pi)=>{
+      let rows='';
+      for(let li=0;li<6;li++){
+        const it=pg[li]||null;
+        rows+='<div class="lbl2-sep">'+SEP+'</div>'
+          +'<div class="lbl2-cell">'
+          +'<div class="lbl2-cell-info">'+lblItemHtml(it)+'</div>'
+          +'<div class="lbl2-cell-swatch">SWATCH</div>'
+          +'</div>';
       }
-    });
-    save(K.I, inbox);
-    toast(added ? added + '件の新着を取得しました' : '新着なし', added ? 'ok' : '');
-    if (newlyAdded.length > 0) autoCreateCasesFromInbox(newlyAdded);
-    renderInbox(); updBadges();
-  } catch(e) { toast('取得エラー: ' + e.message, 'err'); }
+      rows+='<div class="lbl2-sep">'+SEP+'</div>';
+      return '<div class="card mb16"><div class="card-hd">Page '+(pi+1)+'</div>'
+        +'<div class="lbl2-grid">'+rows+'</div></div>';
+    }).join('');
+}
+function buildLblItems(c){
+  const items=[];
+  c.items.forEach(it=>{
+    const m=S.master.find(m=>m.品番===it.品番)||{品番:it.品番};
+    for(let i=0;i<(it.qty||1);i++) items.push({...m,_memo:it.memo||''});
+  });
+  return items;
+}
+function lblItemHtml(it){
+  const fields=[
+    {key:'Yarn Count',  val:it?it.使用糸:''},
+    {key:'Composition', val:it?it.混率:''},
+    {key:'Width',       val:it?it.生地巾:''},
+    {key:'Weight',      val:it?it.目付:''},
+    {key:'Item No.',    val:it?it.品番:''},
+    {key:'Name',        val:it?it.品名:''},
+  ];
+  return fields.map(f=>
+    '<div class="lbl-frow">'
+    +'<span class="lbl-fkey">'+f.key+'</span>'
+    +'<span style="font-size:9px;color:var(--sand-4);margin-right:4px">：</span>'
+    +'<span class="lbl-fval">'+esc(f.val||'')+'</span>'
+    +'</div>'
+  ).join('');
+}
+function printAndSave(){
+  const cid=document.getElementById('lbl-sel')?.value;
+  const c=cid?S.cases.find(c=>c.id===cid):null;
+  if(!c||!c.items.length){toast('案件を選択してください','err');return;}
+  const to=(document.getElementById('lbl-to')?.value||'').trim();
+  if(!to){toast('送り先を入力してください','err');return;}
+  const person=(document.getElementById('lbl-person')?.value||'').trim();
+  const sentDate=document.getElementById('lbl-date')?.value||new Date().toISOString().slice(0,10);
+  const note=(document.getElementById('lbl-note')?.value||'').trim();
+  const rec={id:'hist_'+Date.now(),sentAt:Date.now(),sentDate,
+    recipient:to,contact:person,note,
+    caseName:c.name,caseId:c.id,
+    items:c.items.map(it=>({...it}))};
+  S.history.unshift(rec);saveS();updBadges();
+  execPrint(c,rec);
+  toast('印刷を開始し、送付履歴に保存しました','ok');
+}
+function execPrint(c,info){
+  const items=buildLblItems(c);
+  const pages=[];for(let i=0;i<items.length;i+=6)pages.push(items.slice(i,i+6));
+  const FS="'游明朝 Light','Yu Mincho Light','YuMincho','游明朝','HiraMinProN-W3','Hiragino Mincho ProN','Georgia',serif";
+  const FG="'游ゴシック','Yu Gothic','YuGothic','Noto Sans JP','Hiragino Sans',sans-serif";
+  const SEP='－'.repeat(40);
+  const RH='6mm';
+  const BDR='border-bottom:0.4pt solid #ccc';
+  const FIELDS=[
+    {key:'Yarn Count', prop:'使用糸'},
+    {key:'Composition',prop:'混率'},
+    {key:'Width',      prop:'生地巾'},
+    {key:'Weight',     prop:'目付'},
+    {key:'Item No.',   prop:'品番'},
+    {key:'Name',       prop:'品名'},
+  ];
+  const makeSep=()=>
+    '<tr><td colspan="4" style="height:'+RH+';font-family:'+FG+';font-size:11pt;'
+    +'text-align:center;vertical-align:middle;padding:0;white-space:nowrap;overflow:hidden;letter-spacing:0">'
+    +SEP+'</td></tr>';
+  const makeLabel=it=>
+    FIELDS.map((f,i)=>
+      '<tr>'
+      +'<td style="height:'+RH+';font-family:'+FS+';font-size:9pt;vertical-align:middle;'
+      +'padding:0 1mm 0 0;'+BDR+';white-space:nowrap;overflow:hidden">'+f.key+'</td>'
+      +'<td style="height:'+RH+';font-family:'+FS+';font-size:9pt;vertical-align:middle;'
+      +'text-align:center;padding:0;'+BDR+'">：</td>'
+      +'<td style="height:'+RH+';font-family:'+FS+';font-size:9pt;vertical-align:middle;'
+      +'padding:0 1mm;'+BDR+';white-space:nowrap;overflow:hidden">'
+      +esc(it?it[f.prop]||'':'')+'</td>'
+      +(i===0?'<td rowspan="6" style="border:none;vertical-align:top;padding:0"></td>':'')
+      +'</tr>'
+    ).join('');
+  const html=pages.map((pg,pi)=>{
+    let body='';
+    for(let li=0;li<6;li++) body+=makeSep()+makeLabel(pg[li]||null);
+    body+=makeSep();
+    return '<div'+(pi<pages.length-1?' style="page-break-after:always"':'')+'>'
+      +'<table style="width:174mm;margin:0;border-collapse:collapse;table-layout:fixed">'
+      +'<colgroup><col style="width:26mm"><col style="width:7mm">'
+      +'<col style="width:80mm"><col style="width:61mm"></colgroup>'
+      +'<tbody>'+body+'</tbody></table></div>';
+  }).join('');
+  opPrint(html);
 }
 
-function autoCreateCasesFromInbox(newItems) {
-  // Group incoming submissions by sender name (fallback to company, then '未登録')
-  const groups = {};
-  newItems.forEach(item => {
-    const key = (item.name || item.company || '').trim() || '未登録';
-    if (!groups[key]) {
-      groups[key] = { name: item.name||'', company: item.company||'', mobile: item.mobile||'', mail: item.mail||'', items: [] };
-    }
-    // Support both new multi-item format {items:[...]} and legacy single-item {hinban,...}
-    const fabItems = (item.items && item.items.length)
-      ? item.items
-      : (item.hinban ? [{hinban: item.hinban, qty: item.qty||1, memo: ''}] : []);
-    fabItems.forEach(fi => {
-      if (fi.hinban) groups[key].items.push({hinban: fi.hinban, qty: fi.qty||1, memo: fi.memo||''});
-    });
-  });
-
-  let casesCreated = 0;
-  Object.entries(groups).forEach(([key, g]) => {
-    // Find existing case for this sender (match by case name or company atesaki)
-    let existing = cases.find(c =>
-      c.name === key || (g.company && c.atesaki === g.company)
-    );
-    if (existing) {
-      // Merge items — avoid duplicate hinban
-      g.items.forEach(ni => {
-        if (!existing.items.find(ei => ei.hinban === ni.hinban)) {
-          existing.items.push(ni);
-        }
-      });
-    } else {
-      const contactMemo = [
-        g.mobile ? 'Mobile: ' + g.mobile : '',
-        g.mail   ? 'Mail: '   + g.mail   : '',
-      ].filter(Boolean).join(' / ');
-      cases.push({
-        id: genId(),
-        name: key,
-        atesaki: g.company || g.name,
-        memo: contactMemo,
-        items: g.items,
-        createdAt: new Date().toISOString(),
-      });
-      casesCreated++;
-    }
-  });
-  save(K.C, cases);
-  if (casesCreated > 0) toast(casesCreated + '件の案件を自動作成しました', 'ok');
-  updBadges();
-}
-
-/* ────────────────────────────────
-   13. CASE MANAGEMENT
-──────────────────────────────── */
-let caseItems = [];
-let editingCaseId = null;
-
-function renderCases() {
-  const el = document.getElementById('cases-body');
-  if (!cases.length) {
-    el.innerHTML = '<div class="empty"><div class="empty-ic">&#x229F;</div>'
-      + '<div class="empty-txt">案件なし</div><div class="empty-sub">新規案件を作成してください</div></div>';
+/* ═══ Send History ═══ */
+function renderHistory(){
+  const body=document.getElementById('history-body'); if(!body) return;
+  if(!S.history.length){
+    body.innerHTML='<div class="empty">'
+      +'<div class="empty-ic">&#x25D7;</div>'
+      +'<div class="empty-txt">送付履歴がありません</div>'
+      +'<div class="empty-sub">送付印刷ページで送り先を入力して印刷すると、ここに記録されます</div>'
+      +'</div>';
     return;
   }
-  el.innerHTML = [...cases].reverse().map(c => {
-    const items = (c.items||[]).filter(i => i.hinban);
-    const date = new Date(c.createdAt).toLocaleDateString('ja-JP');
-    const tags = items.slice(0,5).map(i => '<span class="tag tag-g">'+esc(i.hinban)+' ×'+i.qty+'m</span>').join('');
-    const more = items.length > 5 ? '<span class="tag" style="background:var(--ink-4);color:var(--sand-3);border:1px solid var(--ink-5)">+'+( items.length-5)+'</span>' : '';
-    return '<div class="cc mb12">'
-      + '<div class="flex ic jb gap12">'
-      + '<div class="flex-1">'
-      + '<div class="cc-name">' + esc(c.name) + '</div>'
-      + '<div class="cc-meta">'
-      + (c.atesaki ? '<span>' + esc(c.atesaki) + '</span><span>&#183;</span>' : '')
-      + '<span>' + items.length + ' 品番</span><span>&#183;</span><span>' + date + '</span>'
-      + '</div>'
-      + (items.length ? '<div style="display:flex;flex-wrap:wrap;gap:5px;margin-top:10px">'+tags+more+'</div>' : '')
-      + '</div>'
-      + '<div class="flex gap6 no-print">'
-      + '<button class="btn btn-s btn-sm" data-action="edit-case" data-id="'+c.id+'">編集</button>'
-      + '<button class="btn btn-p btn-sm" data-action="send-case" data-id="'+c.id+'">送付印刷</button>'
-      + '<button class="btn btn-d btn-sm" data-action="del-case" data-id="'+c.id+'">削除</button>'
-      + '</div></div></div>';
-  }).join('');
+  body.innerHTML='<div style="display:flex;flex-direction:column;gap:12px">'
+    +S.history.map(h=>{
+      const qty=h.items.reduce((s,i)=>s+(i.qty||1),0);
+      return '<div class="hist-card">'
+        +'<div class="flex ic jb mb12">'
+        +'<div><div style="font-size:14px;font-weight:500">'+esc(h.recipient)
+        +(h.contact?' <span style="font-size:12px;font-weight:400;color:var(--sand-3)">/ '+esc(h.contactplay:flex;flex-direction:column;gap:12px">'
+    +S.history.map(h=>{
+      const qty=h.items.reduce((s,i)=>s+(i.qty||1),0);
+      return '<div class="hist-card">'
+        +'<div class="flex ic jb mb12">'
+        +'<div><div style="font-size:14px;font-weight:500">'+esc(h.recipient)
+        +(h.contact?' <span style="font-size:12px;font-weight:400;color:var(--sand-3)">/ '+esc(h.contact)+'</span>':'')+'</div>'
+        +'<div class="text-d text-xs" style="margin-top:3px">'+esc(h.caseName||'')
+        +' &nbsp;&#183;&nbsp; '+h.items.length+'品番 / '+qty+'点</div></div>'
+        +'<div class="flex gap8 ic"><span class="tag tag-g">'+esc(h.sentDate||'')+'</span>'
+        +'<button class="btn btn-d btn-xs" onclick="delHistory(\''+h.id+'\')">削除</button></div>'
+        +'</div>'
+        +(h.note?'<div style="font-size:11px;color:var(--sand-3);margin-bottom:10px;padding:8px 12px;background:var(--ink-3);border-radius:var(--r)">'+esc(h.note)+'</div>':'')
+        +'<div style="display:flex;flex-wrap:wrap;gap:6px;margin-bottom:12px">'
+        +h.items.slice(0,16).map(it=>'<span class="tag tag-g" style="font-size:9px">'+esc(it.品番)+' &#215;'+(it.qty||1)+'</span>').join('')
+        +(h.items.length>16?'<span style="font-size:11px;color:var(--ink-7);align-self:center">+'+(h.items.length-16)+'品番</span>':'')
+        +'</div>'
+        +'<div class="flex gap8" style="padding-top:12px;border-top:1px solid var(--ink-4)">'
+        +'<button class="btn btn-g btn-sm" onclick="reprintHistory(\''+h.id+'\')">&#x21BB; 再印刷</button>'
+        +'<button class="btn btn-g btn-sm" onclick="expHistCSV(\''+h.id+'\')">&#x2193; CSV</button>'
+        +'</div></div>';
+    }).join('')+'</div>';
+}
+function delHistory(id){
+  if(!confirm('この送付履歴を削除しますか？')) return;
+  S.history=S.history.filter(h=>h.id!==id);
+  saveS();updBadges();renderHistory();toast('削除しました');
+}
+function reprintHistory(id){
+  const h=S.history.find(h=>h.id===id); if(!h) return;
+  execPrint({name:h.caseName,items:h.items},h);
+}
+function expHistCSV(id){
+  const h=S.history.find(h=>h.id===id); if(!h) return;
+  const cols=['品番','品名','混率','生地巾','目付','使用糸','数量','メモ'];
+  const rows=h.items.map(it=>{
+    const m=S.master.find(m=>m.品番===it.品番)||{};
+    return[it.品番,m.品名||'',m.混率||'',m.生地巾||'',m.目付||'',m.使用糸||'',it.qty||1,it.memo||''];
+  });
+  const csv=[cols.join(','),...rows.map(r=>r.map(v=>'"'+String(v).replace(/"/g,'""')+'"').join(','))].join('\n');
+  dl('﻿'+csv,h.recipient+'_'+h.sentDate+'_送付リスト.csv','text/csv;charset=utf-8');
 }
 
-document.getElementById('cases-body').addEventListener('click', e => {
-  const btn = e.target.closest('[data-action]'); if (!btn) return;
-  const id = btn.dataset.id;
-  if (btn.dataset.action === 'edit-case') openCaseModal(id);
-  if (btn.dataset.action === 'del-case')  deleteCase(id);
-  if (btn.dataset.action === 'send-case') {
-    navigate('sendprint');
-    setTimeout(() => {
-      document.getElementById('sp-select').value = id;
-      renderSendPrint();
-    }, 40);
-  }
-});
-
-function openCaseModal(id) {
-  const c = id ? cases.find(x => x.id === id) : null;
-  editingCaseId = id || null;
-  caseItems = c ? (c.items||[]).map(i => ({...i})) : [{hinban:'',qty:1,memo:''}];
-  if (!caseItems.length) caseItems = [{hinban:'',qty:1,memo:''}];
-
-  const html = '<div class="modal-ttl">' + (c ? '案件編集' : '新規案件') + '</div>'
-    + '<div class="g2 mb16">'
-    + _ir('案件名 *', 'c-name', esc(c?.name||''), '例: 2025春夏サンプル')
-    + _ir('宛先', 'c-atesaki', esc(c?.atesaki||''), '例: 〇〇株式会社')
-    + '</div>'
-    + '<div class="inp-row mb16">'
-    + '<label class="inp-lbl">メモ</label>'
-    + '<textarea class="inp" id="c-memo" rows="2">' + esc(c?.memo||'') + '</textarea>'
-    + '</div>'
-    + '<div class="divider"></div>'
-    + '<div class="flex ic jb mb8">'
-    + '<div class="text-xs text-d" style="letter-spacing:.12em;text-transform:uppercase">生地リスト</div>'
-    + '<button class="btn btn-g btn-xs" onclick="addCaseItem()">＋ 行追加</button>'
-    + '</div>'
-    + '<div style="display:grid;grid-template-columns:1fr 72px 1fr 28px;gap:6px;margin-bottom:6px">'
-    + '<div class="text-xs text-d">品番</div><div class="text-xs text-d">数量(m)</div><div class="text-xs text-d">メモ</div><div></div>'
-    + '</div>'
-    + '<div id="ci-list"></div>'
-    + '<div class="modal-acts">'
-    + '<button class="btn btn-s btn-sm" onclick="closeModal()">キャンセル</button>'
-    + '<button class="btn btn-p btn-sm" onclick="saveCase()">保存</button>'
-    + '</div>';
-  openModal(html, true);
-  renderCaseItems();
+/* ═══ Settings ═══ */
+function renderSettings(){
+  document.getElementById('settings-body').innerHTML=
+    '<div style="max-width:500px;display:flex;flex-direction:column;gap:14px">'
+    +'<div class="card"><div class="card-hd">General</div>'
+    +'<div class="inp-row"><label class="inp-lbl">自社名（ラベル印字）</label>'
+    +'<input type="text" class="inp" id="s-co" value="'+esc(S.settings.companyName||'')+'"></div>'
+    +'<div class="inp-row"><label class="inp-lbl">QR 用 URL（任意）</label>'
+    +'<input type="text" class="inp" id="s-url" value="'+esc(S.settings.qrUrl||'')+'" placeholder="https://example.com/fabric/">'
+    +'<div class="inp-hint">設定するとQRコードに「URL/品番」が埋め込まれます</div></div></div>'
+    +'<div class="card"><div class="card-hd">Data Management</div>'
+    +'<div class="flex gap8 mb16" style="flex-wrap:wrap">'
+    +'<button class="btn btn-g btn-sm" onclick="exportMasterCSV()">&#x2193; マスタCSV出力</button>'
+    +'<button class="btn btn-d btn-sm" onclick="clrAll()">全データ削除</button></div>'
+    +'<div class="text-xs" style="color:var(--ink-7);line-height:1.8">'
+    +'マスタ: <span class="text-a">'+S.master.length+'</span> 品番 &nbsp;&#183;&nbsp; '
+    +'案件: <span class="text-a">'+S.cases.length+'</span> 件 &nbsp;&#183;&nbsp; '
+    +'送付履歴: <span class="text-a">'+S.history.length+'</span> 件 &nbsp;&#183;&nbsp; '
+    +'保存先: localStorage</div></div>'
+    +'<div class="card"><div class="card-hd">About</div>'
+    +'<div class="text-xs" style="color:var(--ink-7);line-height:2">'
+    +'FABRIC QR SYSTEM v2.1<br>'
+    +'送付印刷・送付履歴対応版<br>'
+    +'ブラウザで動作する単一HTMLファイル。インストール不要。<br>'
+    +'</div></div>'
+    +'</div>';
+}
+function saveSettings(){
+  S.settings.companyName=document.getElementById('s-co')?.value||'';
+  S.settings.qrUrl=document.getElementById('s-url')?.value||'';
+  saveS();toast('設定を保存しました','ok');
+}
+function clrAll(){
+  if(!confirm('全データを削除しますか？元に戻せません。')) return;
+  S.master=[];S.cases=[];S.history=[];S.activeCaseId=null;
+  saveS();updBadges();renderSettings();toast('データを削除しました');
 }
 
-function renderCaseItems() {
-  const el = document.getElementById('ci-list'); if (!el) return;
-  el.innerHTML = caseItems.map((item, i) => {
-    const opts = fabrics.map(f =>
-      '<option value="'+esc(f.hinban)+'" '+(f.hinban===item.hinban?'selected':'')+'>'
-      + esc(f.hinban) + (f.hinmei ? ' — '+esc(f.hinmei) : '') + '</option>'
-    ).join('');
-    return '<div style="display:grid;grid-template-columns:1fr 72px 1fr 28px;gap:6px;margin-bottom:6px;align-items:center">'
-      + '<select class="inp" style="padding:6px 8px;font-size:12px" onchange="caseItems['+i+'].hinban=this.value">'
-      + '<option value="">品番選択</option>' + opts + '</select>'
-      + '<input type="number" class="inp" min="1" value="'+item.qty+'" style="text-align:right;padding:6px 8px;font-size:12px" onchange="caseItems['+i+'].qty=Math.max(1,parseInt(this.value)||1)">'
-      + '<input type="text" class="inp" value="'+esc(item.memo)+'" placeholder="メモ" style="padding:6px 8px;font-size:12px" onchange="caseItems['+i+'].memo=this.value">'
-      + '<button class="btn btn-d btn-xs" style="padding:5px 7px" onclick="removeCaseItem('+i+')">✕</button>'
-      + '</div>';
-  }).join('');
+/* ═══ Modal ═══ */
+function showModal(html){document.getElementById('modal-box').innerHTML=html;document.getElementById('modal-bg').classList.add('on');}
+function closeModal(){document.getElementById('modal-bg').classList.remove('on');}
+function showNCM(){
+  showModal('<div class="modal-ttl">新規案件作成</div>'
+    +'<div class="inp-row"><label class="inp-lbl">案件名 <span style="color:var(--ruby)">*</span></label>'
+    +'<input type="text" class="inp" id="nc-name" placeholder="例：2025春夏展示会"></div>'
+    +'<div class="inp-row"><label class="inp-lbl">顧客名</label>'
+    +'<input type="text" class="inp" id="nc-client" placeholder="例：ABC商事"></div>'
+    +'<div class="modal-acts">'
+    +'<button class="btn btn-g" onclick="closeModal()">キャンセル</button>'
+    +'<button class="btn btn-p" onclick="createCase()">作成</button>'
+    +'</div>');
+  setTimeout(()=>document.getElementById('nc-name')?.focus(),60);
+}
+function createCase(){
+  const name=document.getElementById('nc-name')?.value.trim();
+  if(!name){toast('案件名を入力してください','err');return;}
+  const client=document.getElementById('nc-client')?.value.trim();
+  const nc={id:'case_'+Date.now(),name,client,createdAt:Date.now(),items:[]};
+  S.cases.unshift(nc);S.activeCaseId=nc.id;saveS();closeModal();updBadges();
+  toast('「'+name+'」を作成しました','ok');
+  if(S.page==='cases') renderCases();
+  if(S.page==='dashboard') renderDash();
 }
 
-function addCaseItem() { caseItems.push({hinban:'',qty:1,memo:''}); renderCaseItems(); }
-function removeCaseItem(i) {
-  caseItems.splice(i, 1);
-  if (!caseItems.length) caseItems.push({hinban:'',qty:1,memo:''});
-  renderCaseItems();
+/* ═══ Print ═══ */
+function opPrint(body){
+  const w=window.open('','_blank','width=960,height=720');
+  if(!w){toast('ポップアップをブロックしてください','err');return;}
+  w.document.write('<!DOCTYPE html><html><head><meta charset="UTF-8">'
+    +'<style>*{box-sizing:border-box;margin:0;padding:0}'
+    +'body{background:white;font-family:\'游明朝 Light\',\'Yu Mincho Light\',\'YuMincho\',\'游明朝\',Georgia,serif}'
+    +'@page{size:A4 portrait;margin:19mm 18mm}'
+    +'@media print{body{margin:0}table{-webkit-print-color-adjust:exact;print-color-adjust:exact}}'
+    +'</style>'
+    +'</head><body>'+body
+    +'<'+'script>window.onload=()=>setTimeout(()=>{window.print();window.close();},400);<'+'/script>'
+    +'</body></html>');
+  w.document.close();
 }
 
-function saveCase() {
-  const name = (document.getElementById('c-name').value||'').trim();
-  if (!name) { toast('案件名を入力してください', 'err'); return; }
-  const data = {
-    id: editingCaseId || genId(),
-    name,
-    atesaki: (document.getElementById('c-atesaki').value||'').trim(),
-    memo:    (document.getElementById('c-memo').value||'').trim(),
-    items:   caseItems.filter(i => i.hinban),
-    createdAt: editingCaseId ? (cases.find(c => c.id === editingCaseId)?.createdAt || new Date().toISOString()) : new Date().toISOString(),
-  };
-  if (editingCaseId) {
-    const i = cases.findIndex(c => c.id === editingCaseId); if (i >= 0) cases[i] = data;
+/* ═══ Badges & Utils ═══ */
+function updBadges(){
+  const bm=document.getElementById('bdg-m');if(bm)bm.textContent=S.master.length>999?'999+':S.master.length;
+  const bc=document.getElementById('bdg-c');if(bc)bc.textContent=S.cases.length;
+  const bh=document.getElementById('bdg-h');if(bh)bh.textContent=S.history.length;
+}
+
+/* ═══ Drag & Drop ═══ */
+function setupDrop(){
+  document.addEventListener('dragover',e=>e.preventDefault());
+  document.addEventListener('drop',e=>{
+    e.preventDefault();
+    if(S.page!=='master') return;
+    const files=[...e.dataTransfer.files].filter(f=>/\.(csv|xlsx?)$/i.test(f.name));
+    if(files.length) importCSV(files);
+  });
+  document.getElementById('csv-in').addEventListener('change',e=>{
+    const files=[...e.target.files];if(files.length)importCSV(files);e.target.value='';
+  });
+}
+
+/* ═══ Init ═══ */
+function init(){
+  loadS();
+  document.querySelectorAll('.nav-item').forEach(el=>el.addEventListener('click',()=>nav(el.dataset.page)));
+  document.getElementById('modal-bg').addEventListener('click',e=>{if(e.target===document.getElementById('modal-bg'))closeModal();});
+  setupDrop();
+  nav('dashboard');
